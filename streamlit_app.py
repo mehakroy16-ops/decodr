@@ -13,20 +13,18 @@ from transformers import AutoModelForSequenceClassification, AutoTokenizer
 st.set_page_config(
     page_title="Decodr",
     page_icon="◆",
-    layout="wide"
+    layout="wide",
+    initial_sidebar_state="collapsed"
 )
 
 
 # ============================================================
-# DECODR SETTINGS
+# SETTINGS
 # ============================================================
 
 MODEL_ID = "MehakR/decodr-roberta-intent-classifier"
 
-# Validation-selected confidence threshold from dissertation
 AUTO_THRESHOLD = 0.991
-
-# Final RoBERTa sequence length
 MAX_LENGTH = 32
 
 
@@ -66,39 +64,177 @@ INTENT_TO_CATEGORY = {
 
 
 # ============================================================
-# SMALL AMOUNT OF CUSTOM STYLING
+# CUSTOM DESIGN
 # ============================================================
 
 st.markdown(
     """
     <style>
 
+    /* Main page */
     .block-container {
-        max-width: 1150px;
-        padding-top: 2.5rem;
+        max-width: 1100px;
+        padding-top: 2.2rem;
         padding-bottom: 4rem;
     }
 
-    .decodr-title {
-        font-size: 4rem;
-        font-weight: 750;
-        letter-spacing: -2px;
-        margin-bottom: 0;
+    /* Hide Streamlit decoration */
+    #MainMenu {
+        visibility: hidden;
     }
 
-    .decodr-subtitle {
-        font-size: 1.25rem;
-        opacity: 0.75;
-        margin-top: -8px;
-        margin-bottom: 25px;
+    footer {
+        visibility: hidden;
     }
 
-    .section-label {
-        font-size: 0.85rem;
+    /* Hero */
+    .hero {
+        text-align: center;
+        padding: 2.5rem 1rem 2.2rem 1rem;
+    }
+
+    .brand {
+        font-size: 4.6rem;
+        font-weight: 800;
+        letter-spacing: -4px;
+        line-height: 1;
+        margin-bottom: 0.7rem;
+    }
+
+    .tagline {
+        font-size: 1.45rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+    }
+
+    .hero-description {
+        font-size: 1rem;
+        opacity: 0.65;
+        max-width: 650px;
+        margin: auto;
+    }
+
+    /* Small section label */
+    .eyebrow {
+        font-size: 0.75rem;
         font-weight: 700;
+        letter-spacing: 1.4px;
         text-transform: uppercase;
-        letter-spacing: 1px;
+        opacity: 0.55;
+        margin-bottom: 0.35rem;
+    }
+
+    /* Result card */
+    .result-card {
+        border: 1px solid rgba(128,128,128,0.20);
+        border-radius: 18px;
+        padding: 1.4rem 1.5rem;
+        min-height: 135px;
+    }
+
+    .result-label {
+        font-size: 0.78rem;
+        opacity: 0.55;
+        text-transform: uppercase;
+        font-weight: 700;
+        letter-spacing: 0.8px;
+        margin-bottom: 0.55rem;
+    }
+
+    .result-value {
+        font-size: 1.55rem;
+        font-weight: 700;
+        line-height: 1.2;
+    }
+
+    .result-subtext {
+        font-size: 0.86rem;
+        opacity: 0.58;
+        margin-top: 0.45rem;
+    }
+
+    /* Routing cards */
+    .route-auto {
+        border-radius: 18px;
+        padding: 1.5rem 1.7rem;
+        border: 1px solid rgba(31, 157, 85, 0.35);
+        background: rgba(31, 157, 85, 0.08);
+        margin-bottom: 1rem;
+    }
+
+    .route-review {
+        border-radius: 18px;
+        padding: 1.5rem 1.7rem;
+        border: 1px solid rgba(230, 165, 35, 0.40);
+        background: rgba(230, 165, 35, 0.09);
+        margin-bottom: 1rem;
+    }
+
+    .route-title {
+        font-size: 1.25rem;
+        font-weight: 750;
+        margin-bottom: 0.35rem;
+    }
+
+    .route-copy {
+        font-size: 0.95rem;
+        opacity: 0.78;
+    }
+
+    /* Alternative prediction card */
+    .alternative-card {
+        border: 1px solid rgba(128,128,128,0.18);
+        border-radius: 16px;
+        padding: 1.15rem 1.3rem;
+    }
+
+    .alternative-rank {
+        font-size: 0.74rem;
+        opacity: 0.52;
+        text-transform: uppercase;
+        font-weight: 700;
+        letter-spacing: 0.7px;
+    }
+
+    .alternative-name {
+        font-size: 1.1rem;
+        font-weight: 650;
+        margin-top: 0.4rem;
+    }
+
+    .alternative-confidence {
+        font-size: 0.9rem;
         opacity: 0.60;
+        margin-top: 0.2rem;
+    }
+
+    /* Button */
+    .stButton > button {
+        border-radius: 12px;
+        height: 3.1rem;
+        font-weight: 650;
+        font-size: 1rem;
+    }
+
+    /* Text area */
+    .stTextArea textarea {
+        border-radius: 14px;
+        font-size: 1.05rem;
+        padding: 1rem;
+    }
+
+    /* Tabs */
+    button[data-baseweb="tab"] {
+        font-size: 1rem;
+        font-weight: 600;
+    }
+
+    /* Footer */
+    .decodr-footer {
+        text-align: center;
+        opacity: 0.45;
+        font-size: 0.8rem;
+        padding-top: 1.5rem;
     }
 
     </style>
@@ -108,7 +244,7 @@ st.markdown(
 
 
 # ============================================================
-# LOAD PRIVATE HUGGING FACE MODEL
+# LOAD PRIVATE MODEL
 # ============================================================
 
 @st.cache_resource
@@ -132,29 +268,29 @@ def load_decodr():
 
 
 try:
-
     tokenizer, model = load_decodr()
 
-except Exception as e:
+except Exception:
 
     st.error(
         "Decodr could not load its classification model. "
-        "Please check the Hugging Face model access configuration."
+        "Please check the private model access configuration."
     )
 
     st.stop()
 
 
 # ============================================================
-# HELPER FUNCTIONS
+# FUNCTIONS
 # ============================================================
 
 def clean_query(text):
 
     text = unicodedata.normalize("NFKC", text)
-    text = " ".join(text.strip().split())
 
-    return text
+    return " ".join(
+        text.strip().split()
+    )
 
 
 def get_label(class_id):
@@ -200,7 +336,10 @@ def predict_intent(query):
 
     predictions = []
 
-    for prob, class_id in zip(top_probs, top_ids):
+    for probability, class_id in zip(
+        top_probs,
+        top_ids
+    ):
 
         class_id = class_id.item()
 
@@ -209,47 +348,50 @@ def predict_intent(query):
         predictions.append(
             {
                 "intent": intent,
-                "confidence": prob.item()
+                "confidence": probability.item()
             }
         )
 
-    main_prediction = predictions[0]
+    primary = predictions[0]
 
     category = INTENT_TO_CATEGORY.get(
-        main_prediction["intent"],
+        primary["intent"],
         "UNKNOWN"
     )
 
     return {
-        "intent": main_prediction["intent"],
+        "intent": primary["intent"],
         "category": category,
-        "confidence": main_prediction["confidence"],
+        "confidence": primary["confidence"],
         "predictions": predictions
     }
 
 
 # ============================================================
-# HEADER
+# HERO
 # ============================================================
 
 st.markdown(
-    '<div class="decodr-title">Decodr</div>',
+    """
+    <div class="hero">
+
+        <div class="brand">
+            Decodr
+        </div>
+
+        <div class="tagline">
+            Decode customer intent. Route smarter.
+        </div>
+
+        <div class="hero-description">
+            AI-assisted customer-service intent classification
+            with confidence-based automation and human escalation.
+        </div>
+
+    </div>
+    """,
     unsafe_allow_html=True
 )
-
-st.markdown(
-    '<div class="decodr-subtitle">'
-    'Decode customer intent. Route smarter.'
-    '</div>',
-    unsafe_allow_html=True
-)
-
-st.write(
-    "AI-assisted customer-service intent classification "
-    "and confidence-based routing."
-)
-
-st.divider()
 
 
 # ============================================================
@@ -258,7 +400,7 @@ st.divider()
 
 classifier_tab, insights_tab, about_tab = st.tabs(
     [
-        "Try Decodr",
+        "◆ Try Decodr",
         "Model Insights",
         "About"
     ]
@@ -266,24 +408,30 @@ classifier_tab, insights_tab, about_tab = st.tabs(
 
 
 # ============================================================
-# TAB 1 — LIVE CLASSIFIER
+# TAB 1 — CLASSIFIER
 # ============================================================
 
 with classifier_tab:
 
+    st.write("")
+
     st.markdown(
-        '<p class="section-label">Customer Query</p>',
+        '<div class="eyebrow">Customer Query</div>',
         unsafe_allow_html=True
     )
 
-    st.subheader(
+    st.header(
         "What does the customer need?"
     )
 
+    st.caption(
+        "Enter a customer-service request in natural language."
+    )
+
     query = st.text_area(
-        "Enter a customer-service query",
+        "Customer query",
         placeholder=(
-            "Example: I placed an order yesterday "
+            "e.g. I placed an order yesterday "
             "but I need to cancel it."
         ),
         height=150,
@@ -291,7 +439,7 @@ with classifier_tab:
     )
 
     decode_button = st.button(
-        "Decode Intent",
+        "Decode Intent →",
         type="primary",
         use_container_width=True
     )
@@ -301,132 +449,278 @@ with classifier_tab:
         if not query.strip():
 
             st.warning(
-                "Enter a customer query before running Decodr."
+                "Enter a customer query first."
             )
 
         else:
 
-            result = predict_intent(query)
+            with st.spinner(
+                "Decoding customer intent..."
+            ):
 
+                result = predict_intent(query)
+
+            st.write("")
             st.divider()
+            st.write("")
+
+            # ------------------------------------------------
+            # CLASSIFICATION RESULT
+            # ------------------------------------------------
 
             st.markdown(
-                '<p class="section-label">Classification Result</p>',
+                '<div class="eyebrow">Classification Result</div>',
                 unsafe_allow_html=True
             )
 
-            col1, col2, col3 = st.columns(3)
+            st.header(
+                "Decodr's interpretation"
+            )
 
-            with col1:
+            c1, c2, c3 = st.columns(3)
 
-                st.metric(
-                    "Predicted Intent",
-                    readable_intent(result["intent"])
+            with c1:
+
+                st.markdown(
+                    f"""
+                    <div class="result-card">
+
+                        <div class="result-label">
+                            Predicted Intent
+                        </div>
+
+                        <div class="result-value">
+                            {readable_intent(result["intent"])}
+                        </div>
+
+                        <div class="result-subtext">
+                            Most likely customer need
+                        </div>
+
+                    </div>
+                    """,
+                    unsafe_allow_html=True
                 )
 
-            with col2:
+            with c2:
 
-                st.metric(
-                    "Business Category",
-                    result["category"]
+                st.markdown(
+                    f"""
+                    <div class="result-card">
+
+                        <div class="result-label">
+                            Business Category
+                        </div>
+
+                        <div class="result-value">
+                            {result["category"]}
+                        </div>
+
+                        <div class="result-subtext">
+                            Suggested workflow
+                        </div>
+
+                    </div>
+                    """,
+                    unsafe_allow_html=True
                 )
 
-            with col3:
+            with c3:
 
-                st.metric(
-                    "Model Confidence",
-                    f'{result["confidence"]:.2%}'
+                st.markdown(
+                    f"""
+                    <div class="result-card">
+
+                        <div class="result-label">
+                            Model Confidence
+                        </div>
+
+                        <div class="result-value">
+                            {result["confidence"]:.2%}
+                        </div>
+
+                        <div class="result-subtext">
+                            Routing threshold: {AUTO_THRESHOLD:.2%}
+                        </div>
+
+                    </div>
+                    """,
+                    unsafe_allow_html=True
                 )
 
             st.write("")
 
-            # --------------------------------------------
+            # Confidence progress bar
+            st.progress(
+                result["confidence"],
+                text=(
+                    f'Prediction confidence: '
+                    f'{result["confidence"]:.2%}'
+                )
+            )
+
+            st.write("")
+            st.write("")
+
+            # ------------------------------------------------
             # ROUTING DECISION
-            # --------------------------------------------
+            # ------------------------------------------------
 
             st.markdown(
-                "### Routing Decision"
+                '<div class="eyebrow">Routing Decision</div>',
+                unsafe_allow_html=True
             )
 
             if result["confidence"] >= AUTO_THRESHOLD:
 
-                st.success(
-                    "✓ Automatic routing recommended"
-                )
+                st.markdown(
+                    f"""
+                    <div class="route-auto">
 
-                st.write(
-                    f"This query can be routed to the "
-                    f"**{result['category']}** workflow."
-                )
+                        <div class="route-title">
+                            ✓ Automatic routing recommended
+                        </div>
 
-                st.caption(
-                    f"Confidence exceeds the "
-                    f"{AUTO_THRESHOLD:.3f} validation-selected "
-                    f"operating threshold."
+                        <div class="route-copy">
+                            Confidence of
+                            <strong>{result["confidence"]:.2%}</strong>
+                            exceeds the
+                            <strong>{AUTO_THRESHOLD:.2%}</strong>
+                            operating threshold.
+
+                            This query can be routed to the
+                            <strong>{result["category"]}</strong>
+                            workflow.
+                        </div>
+
+                    </div>
+                    """,
+                    unsafe_allow_html=True
                 )
 
             else:
 
-                st.warning(
-                    "⚠ Human review recommended"
+                st.markdown(
+                    f"""
+                    <div class="route-review">
+
+                        <div class="route-title">
+                            ⚠ Human review recommended
+                        </div>
+
+                        <div class="route-copy">
+                            Confidence of
+                            <strong>{result["confidence"]:.2%}</strong>
+                            is below the
+                            <strong>{AUTO_THRESHOLD:.2%}</strong>
+                            operating threshold.
+
+                            The prediction should therefore be
+                            reviewed before the query is routed.
+                        </div>
+
+                    </div>
+                    """,
+                    unsafe_allow_html=True
                 )
 
-                st.write(
-                    "The model's confidence is below the "
-                    "selected operating threshold, so the query "
-                    "should be reviewed before routing."
-                )
+            st.write("")
 
-                st.caption(
-                    f"Current confidence: "
-                    f"{result['confidence']:.2%} | "
-                    f"Threshold: {AUTO_THRESHOLD:.3f}"
-                )
-
-            # --------------------------------------------
+            # ------------------------------------------------
             # ALTERNATIVE PREDICTIONS
-            # --------------------------------------------
+            # ------------------------------------------------
 
             st.markdown(
-                "### Alternative Interpretations"
+                '<div class="eyebrow">Alternative Interpretations</div>',
+                unsafe_allow_html=True
             )
 
-            alternatives = pd.DataFrame(
-                [
-                    {
-                        "Intent": readable_intent(pred["intent"]),
-                        "Confidence": f'{pred["confidence"]:.2%}'
-                    }
-                    for pred in result["predictions"][1:]
-                ]
+            st.subheader(
+                "Other possibilities considered"
             )
 
-            st.dataframe(
-                alternatives,
-                hide_index=True,
-                use_container_width=True
-            )
+            alt1 = result["predictions"][1]
+            alt2 = result["predictions"][2]
+
+            a1, a2 = st.columns(2)
+
+            with a1:
+
+                st.markdown(
+                    f"""
+                    <div class="alternative-card">
+
+                        <div class="alternative-rank">
+                            Second most likely
+                        </div>
+
+                        <div class="alternative-name">
+                            {readable_intent(alt1["intent"])}
+                        </div>
+
+                        <div class="alternative-confidence">
+                            {alt1["confidence"]:.2%} confidence
+                        </div>
+
+                    </div>
+                    """,
+                    unsafe_allow_html=True
+                )
+
+            with a2:
+
+                st.markdown(
+                    f"""
+                    <div class="alternative-card">
+
+                        <div class="alternative-rank">
+                            Third most likely
+                        </div>
+
+                        <div class="alternative-name">
+                            {readable_intent(alt2["intent"])}
+                        </div>
+
+                        <div class="alternative-confidence">
+                            {alt2["confidence"]:.2%} confidence
+                        </div>
+
+                    </div>
+                    """,
+                    unsafe_allow_html=True
+                )
+
+            st.write("")
+
+            # ------------------------------------------------
+            # EXPLANATION
+            # ------------------------------------------------
 
             with st.expander(
                 "How does Decodr make this decision?"
             ):
 
-                st.write(
-                    """
-                    Decodr uses a fine-tuned RoBERTa
-                    sequence-classification model to assign the
-                    customer query to one of 27 customer-service
-                    intents.
+                st.markdown(
+                    f"""
+                    Decodr uses the fine-tuned **RoBERTa**
+                    sequence-classification model evaluated in
+                    the dissertation.
 
-                    The model's highest probability determines
-                    the predicted intent. The prediction is then
-                    compared with the confidence threshold
-                    selected during validation.
+                    The customer's text is classified into one of
+                    **27 customer-service intents**.
 
-                    Predictions meeting the threshold are treated
-                    as candidates for automatic routing. Lower
-                    confidence predictions are referred for human
-                    review.
+                    The intent with the highest model probability
+                    becomes the primary prediction.
+
+                    Decodr then compares that confidence with the
+                    validation-selected threshold of
+                    **{AUTO_THRESHOLD:.2%}**.
+
+                    **≥ {AUTO_THRESHOLD:.2%}**
+                    → eligible for automatic routing
+
+                    **< {AUTO_THRESHOLD:.2%}**
+                    → human review recommended
                     """
                 )
 
@@ -437,14 +731,50 @@ with classifier_tab:
 
 with insights_tab:
 
+    st.write("")
+
     st.markdown(
-        '<p class="section-label">Dissertation Results</p>',
+        '<div class="eyebrow">Research Results</div>',
         unsafe_allow_html=True
     )
 
-    st.subheader(
-        "How did the models perform?"
+    st.header(
+        "Model performance"
     )
+
+    st.caption(
+        "Held-out evaluation across five classification models."
+    )
+
+    m1, m2, m3, m4 = st.columns(4)
+
+    with m1:
+        st.metric(
+            "RoBERTa Macro-F1",
+            "0.99898"
+        )
+
+    with m2:
+        st.metric(
+            "Test Errors",
+            "3 / 3,645"
+        )
+
+    with m3:
+        st.metric(
+            "High-Risk Errors",
+            "1"
+        )
+
+    with m4:
+        st.metric(
+            "Best Model",
+            "RoBERTa"
+        )
+
+    st.write("")
+    st.divider()
+    st.write("")
 
     results = pd.DataFrame(
         {
@@ -455,7 +785,6 @@ with insights_tab:
                 "Logistic Regression",
                 "Multinomial Naive Bayes"
             ],
-
             "Macro-F1": [
                 0.998982,
                 0.997925,
@@ -463,7 +792,6 @@ with insights_tab:
                 0.992812,
                 0.992262
             ],
-
             "Test Errors": [
                 3,
                 7,
@@ -471,7 +799,6 @@ with insights_tab:
                 25,
                 26
             ],
-
             "High-Risk Errors": [
                 1,
                 4,
@@ -482,14 +809,20 @@ with insights_tab:
         }
     )
 
+    st.subheader(
+        "Comparative performance"
+    )
+
     st.dataframe(
         results,
         hide_index=True,
         use_container_width=True
     )
 
-    st.markdown(
-        "### Held-Out Test Errors"
+    st.write("")
+
+    st.subheader(
+        "Held-out test errors"
     )
 
     chart_data = (
@@ -503,50 +836,49 @@ with insights_tab:
         chart_data
     )
 
+    st.write("")
+    st.divider()
+    st.write("")
+
     st.markdown(
-        "### Confidence-Based Routing"
+        '<div class="eyebrow">Confidence-Based Routing</div>',
+        unsafe_allow_html=True
     )
 
-    c1, c2, c3, c4 = st.columns(4)
+    st.subheader(
+        "Validation-selected operating point"
+    )
 
-    with c1:
+    x1, x2, x3, x4 = st.columns(4)
 
+    with x1:
         st.metric(
             "Threshold",
-            "0.991"
+            "99.10%"
         )
 
-    with c2:
-
+    with x2:
         st.metric(
             "Automation Coverage",
             "99.70%"
         )
 
-    with c3:
-
+    with x3:
         st.metric(
             "Selective Accuracy",
             "99.92%"
         )
 
-    with c4:
-
+    with x4:
         st.metric(
             "Human Review",
             "11 / 3,612"
         )
 
     st.caption(
-        "Confidence-based operating-point results were "
-        "obtained from the validation set."
-    )
-
-    st.info(
-        "RoBERTa achieved the highest predictive performance, "
-        "but the dissertation also evaluates computational "
-        "cost, model size and business-risk errors when "
-        "considering practical deployment."
+        "Confidence operating-point statistics are based "
+        "on validation-set analysis rather than the final "
+        "held-out test set."
     )
 
 
@@ -556,72 +888,86 @@ with insights_tab:
 
 with about_tab:
 
+    st.write("")
+
     st.markdown(
-        '<p class="section-label">Research Prototype</p>',
+        '<div class="eyebrow">Research Prototype</div>',
         unsafe_allow_html=True
     )
 
-    st.subheader(
+    st.header(
         "About Decodr"
     )
 
-    st.write(
+    st.markdown(
         """
-        **Decodr** is an academic proof-of-concept developed
-        as part of an MSc Business Analytics dissertation.
+        **Decodr** is an AI-assisted customer-service intent
+        classification prototype developed as part of an
+        MSc Business Analytics dissertation.
 
-        The application demonstrates how Natural Language
-        Processing can be used to classify customer-service
-        queries and support automated routing decisions.
+        It demonstrates how Natural Language Processing can
+        support the first stage of customer-service automation:
+        understanding what a customer wants and deciding whether
+        the query can be routed automatically or should be
+        reviewed by a human.
         """
+    )
+
+    st.write("")
+
+    st.subheader(
+        "What Decodr demonstrates"
     )
 
     st.markdown(
-        "### What Decodr demonstrates"
+        """
+        **27 customer-service intents**  
+        Fine-grained prediction of the customer's request.
+
+        **11 business categories**  
+        Broader operational grouping for routing.
+
+        **Prediction confidence**  
+        An indication of model certainty.
+
+        **Alternative interpretations**  
+        The next two most likely intents considered by the model.
+
+        **Confidence-based escalation**  
+        Lower-confidence queries are sent for human review
+        rather than automatically routed.
+        """
     )
 
-    st.write(
-        """
-        - Classification across **27 customer-service intents**
-        - Mapping to **11 broader business categories**
-        - Prediction confidence
-        - Alternative likely interpretations
-        - Confidence-based automatic routing
-        - Human escalation for lower-confidence queries
-        """
-    )
+    st.write("")
 
-    st.markdown(
-        "### Model"
-    )
-
-    st.write(
-        """
-        The demonstration uses the fine-tuned **RoBERTa**
-        model evaluated in the dissertation.
-
-        The model receives only the customer query as its
-        classification input. Category labels and routing
-        recommendations are generated after prediction.
-        """
+    st.subheader(
+        "Research model"
     )
 
     st.markdown(
-        "### Important limitation"
+        """
+        The application uses the final fine-tuned **RoBERTa**
+        classifier evaluated in the dissertation.
+
+        Only the customer's query is provided to the
+        classification model. Business category and routing
+        information are added after the intent prediction.
+        """
+    )
+
+    st.write("")
+
+    st.subheader(
+        "Scope"
     )
 
     st.warning(
-        "Decodr is a research demonstration rather than a "
-        "production customer-service system. The model was "
-        "evaluated using the dissertation dataset and would "
-        "require further testing on real operational queries "
-        "before deployment."
-    )
-
-    st.caption(
-        "Queries entered into this prototype are used for "
-        "inference and are not intentionally stored by the "
-        "application."
+        "Decodr is an academic proof of concept, not a live "
+        "customer-service deployment. Its results demonstrate "
+        "technical feasibility on the dissertation dataset and "
+        "should not be interpreted as production performance "
+        "without evaluation on real operational customer queries."
     )
 
 
@@ -629,8 +975,17 @@ with about_tab:
 # FOOTER
 # ============================================================
 
-st.divider()
-
-st.caption(
-    "Decodr • MSc Business Analytics research prototype"
+st.markdown(
+    """
+    <div class="decodr-footer">
+        Decodr · MSc Business Analytics research prototype
+    </div>
+    """,
+    unsafe_allow_html=True
 )
+
+
+
+       
+
+    
