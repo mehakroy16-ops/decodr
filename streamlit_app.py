@@ -1,4 +1,4 @@
-import html
+import html as html_lib
 import unicodedata
 
 import pandas as pd
@@ -22,7 +22,7 @@ st.set_page_config(
 
 
 # ============================================================
-# RESEARCH CONFIG
+# CONFIGURATION
 # ============================================================
 
 MODEL_ID = "MehakR/decodr-roberta-intent-classifier"
@@ -82,7 +82,7 @@ EXAMPLE_QUERIES = {
     "Contact a human":
         "I need to speak to a human agent.",
 
-    "Ambiguous request":
+    "Ambiguous account request":
         "I need to change something on my account but I am not sure what.",
 }
 
@@ -153,7 +153,7 @@ with st.sidebar:
 
     st.divider()
 
-    st.markdown("#### Operating point")
+    st.markdown("#### Research operating point")
 
     st.metric(
         "Routing threshold",
@@ -167,7 +167,7 @@ with st.sidebar:
 
 
 # ============================================================
-# GLOBAL UI
+# GLOBAL DESIGN
 # ============================================================
 
 st.markdown(
@@ -175,48 +175,58 @@ st.markdown(
 <style>
 
 :root {
-
     --purple: #6D4AFF;
-    --purple-dark: #4F35D2;
-    --purple-soft: #EEE9FF;
-    --purple-soft-2: #F6F3FF;
+    --purple-dark: #5135D5;
+    --purple-mid: #8D74FF;
+    --lavender: #EEE9FF;
+    --lavender-soft: #F7F5FF;
 
     --bg: #F8F7FC;
-
-    --surface: #FFFFFF;
-    --surface-soft: #FBFAFF;
+    --card: #FFFFFF;
 
     --border: #E9E5F2;
 
-    --text: #1D1B2A;
-    --text-2: #494557;
-    --muted: #858090;
+    --text: #1E1B2B;
+    --text-secondary: #615B6D;
+    --muted: #8D8797;
 
-    --green: #18A875;
-    --green-soft: #EAFBF5;
+    --green: #17966B;
+    --green-bg: #EAFAF4;
 
-    --amber: #D88B16;
-    --amber-soft: #FFF8E9;
+    --amber: #B7791F;
+    --amber-bg: #FFF8E8;
 }
 
 
-/* ---------------------------------------------------------
-   APP BACKGROUND
---------------------------------------------------------- */
+/* =========================================================
+   APP
+========================================================= */
+
+html,
+body,
+[class*="css"] {
+    font-family:
+        Inter,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+}
+
 
 [data-testid="stAppViewContainer"] {
 
     background:
 
         radial-gradient(
-            circle at 5% 0%,
-            rgba(109, 74, 255, 0.09),
-            transparent 26%
+            circle at 7% 0%,
+            rgba(109,74,255,0.10),
+            transparent 25%
         ),
 
         radial-gradient(
-            circle at 95% 12%,
-            rgba(181, 160, 255, 0.11),
+            circle at 95% 10%,
+            rgba(175,157,255,0.12),
             transparent 27%
         ),
 
@@ -237,66 +247,50 @@ st.markdown(
 
 .block-container {
 
-    max-width: 1180px;
+    max-width: 1160px;
 
-    padding-top: 1.3rem;
+    padding-top: 1.4rem;
     padding-bottom: 4rem;
 }
 
 
-/* ---------------------------------------------------------
+/* =========================================================
    SIDEBAR
---------------------------------------------------------- */
+========================================================= */
 
 [data-testid="stSidebar"] {
 
     background:
+
         linear-gradient(
             180deg,
-            #FBFAFF,
-            #F5F2FC
+            #FCFBFF,
+            #F4F1FC
         );
 
-    border-right: 1px solid #E9E5F2;
+    border-right:
+        1px solid #E8E3F1;
 }
 
 
 [data-testid="stSidebar"] * {
-    color: #2C2840;
+    color: #2E2940;
 }
 
 
-/* ---------------------------------------------------------
-   HEADINGS
---------------------------------------------------------- */
-
-h1,
-h2,
-h3 {
-
-    color: #1D1B2A !important;
-}
-
-
-/* ---------------------------------------------------------
+/* =========================================================
    TABS
---------------------------------------------------------- */
+========================================================= */
 
 .stTabs [data-baseweb="tab-list"] {
 
-    gap: 8px;
+    gap: 7px;
 
     background:
-        rgba(
-            255,
-            255,
-            255,
-            0.88
-        );
+        rgba(255,255,255,0.82);
 
     border:
-        1px solid
-        #E8E4F1;
+        1px solid #E7E3EF;
 
     padding: 7px;
 
@@ -307,39 +301,44 @@ h3 {
 
     box-shadow:
         0 8px 30px
-        rgba(58, 39, 120, 0.05);
+        rgba(60,42,120,0.05);
 }
 
 
 .stTabs [data-baseweb="tab"] {
 
-    height: 47px;
-
-    border-radius: 11px;
+    height: 46px;
 
     padding:
-        0 23px;
+        0 22px;
 
-    color: #777181;
+    border-radius:
+        11px;
 
-    font-weight: 650;
+    color:
+        #777181;
+
+    font-weight:
+        650;
 }
 
 
 .stTabs [aria-selected="true"] {
 
-    color: #5A3FE0 !important;
+    color:
+        #5E42DE !important;
 
     background:
+
         linear-gradient(
             135deg,
-            #F0EBFF,
+            #EFEAFF,
             #F8F6FF
         ) !important;
 
     box-shadow:
         inset 0 0 0 1px
-        rgba(109,74,255,0.13);
+        rgba(109,74,255,0.12);
 }
 
 
@@ -348,124 +347,20 @@ h3 {
 }
 
 
-/* ---------------------------------------------------------
-   INPUT
---------------------------------------------------------- */
-
-.stTextArea textarea {
-
-    background:
-        rgba(
-            255,
-            255,
-            255,
-            0.95
-        ) !important;
-
-    color:
-        #242131 !important;
-
-    border:
-        1px solid
-        #E3DFEB !important;
-
-    border-radius:
-        17px !important;
-
-    font-size:
-        1.04rem !important;
-
-    line-height:
-        1.65 !important;
-
-    padding:
-        18px !important;
-
-    box-shadow:
-        0 8px 28px
-        rgba(52,35,105,0.035);
-}
-
-
-.stTextArea textarea:focus {
-
-    border-color:
-        #8A70FF !important;
-
-    box-shadow:
-
-        0 0 0 3px
-        rgba(109,74,255,0.08),
-
-        0 12px 35px
-        rgba(67,46,150,0.07) !important;
-}
-
-
-/* ---------------------------------------------------------
-   BUTTON
---------------------------------------------------------- */
-
-.stButton > button {
-
-    min-height: 49px;
-
-    border-radius:
-        13px !important;
-
-    border:
-        1px solid
-        #6042E8 !important;
-
-    background:
-
-        linear-gradient(
-            135deg,
-            #7455FF,
-            #5B3CDD
-        ) !important;
-
-    color:
-        white !important;
-
-    font-weight:
-        750 !important;
-
-    box-shadow:
-        0 8px 25px
-        rgba(109,74,255,0.18);
-
-    transition:
-        transform 0.18s ease,
-        box-shadow 0.18s ease;
-}
-
-
-.stButton > button:hover {
-
-    transform:
-        translateY(-1px);
-
-    box-shadow:
-        0 12px 34px
-        rgba(109,74,255,0.28);
-}
-
-
-/* ---------------------------------------------------------
-   SECTION TITLES
---------------------------------------------------------- */
+/* =========================================================
+   SECTION HEADINGS
+========================================================= */
 
 .kicker {
 
     color:
-        #7051EF;
+        #6D4AFF;
 
     font-size:
-        0.76rem;
+        0.74rem;
 
     font-weight:
-        750;
+        760;
 
     letter-spacing:
         0.16em;
@@ -481,13 +376,13 @@ h3 {
 .section-title {
 
     color:
-        #1C1928;
+        #1E1B2B;
 
     font-size:
         2rem;
 
     font-weight:
-        770;
+        780;
 
     letter-spacing:
         -0.035em;
@@ -513,14 +408,121 @@ h3 {
 }
 
 
-/* ---------------------------------------------------------
+/* =========================================================
+   INPUT
+========================================================= */
+
+.stTextArea textarea {
+
+    background:
+        rgba(255,255,255,0.96) !important;
+
+    color:
+        #24202F !important;
+
+    border:
+        1px solid #E3DFEB !important;
+
+    border-radius:
+        17px !important;
+
+    font-size:
+        1.04rem !important;
+
+    line-height:
+        1.65 !important;
+
+    padding:
+        18px !important;
+
+    box-shadow:
+        0 8px 28px
+        rgba(50,35,100,0.035);
+}
+
+
+.stTextArea textarea:focus {
+
+    border-color:
+        #8D74FF !important;
+
+    box-shadow:
+
+        0 0 0 3px
+        rgba(109,74,255,0.08),
+
+        0 12px 35px
+        rgba(67,46,150,0.07) !important;
+}
+
+
+/* =========================================================
+   BUTTON
+========================================================= */
+
+.stButton > button {
+
+    min-height:
+        50px;
+
+    border-radius:
+        13px !important;
+
+    border:
+        1px solid #6547E6 !important;
+
+    background:
+
+        linear-gradient(
+            135deg,
+            #7658FF,
+            #5B3CDD
+        ) !important;
+
+    color:
+        white !important;
+
+    font-weight:
+        750 !important;
+
+    box-shadow:
+        0 8px 25px
+        rgba(109,74,255,0.18);
+
+    transition:
+        transform 0.18s ease,
+        box-shadow 0.18s ease;
+}
+
+
+.stButton > button:hover {
+
+    transform:
+        translateY(-1px);
+
+    box-shadow:
+        0 13px 34px
+        rgba(109,74,255,0.27);
+}
+
+
+/* =========================================================
    RESULT CARDS
---------------------------------------------------------- */
+========================================================= */
 
 .result-card {
 
     position:
         relative;
+
+    min-height:
+        174px;
+
+    padding:
+        22px;
+
+    overflow:
+        hidden;
 
     background:
 
@@ -531,28 +533,18 @@ h3 {
         );
 
     border:
-        1px solid
-        #E9E5F2;
+        1px solid #E8E4F0;
 
     border-radius:
         21px;
 
-    padding:
-        22px;
-
-    min-height:
-        172px;
-
     box-shadow:
         0 14px 40px
         rgba(49,33,103,0.055);
-
-    overflow:
-        hidden;
 }
 
 
-.result-card::before {
+.result-card::after {
 
     content: "";
 
@@ -560,16 +552,16 @@ h3 {
         absolute;
 
     width:
-        130px;
+        140px;
 
     height:
-        130px;
+        140px;
 
     right:
-        -65px;
+        -75px;
 
     top:
-        -65px;
+        -75px;
 
     border-radius:
         100%;
@@ -578,7 +570,7 @@ h3 {
 
         radial-gradient(
             circle,
-            rgba(109,74,255,0.10),
+            rgba(109,74,255,0.11),
             transparent 70%
         );
 }
@@ -587,10 +579,10 @@ h3 {
 .result-icon {
 
     width:
-        36px;
+        38px;
 
     height:
-        36px;
+        38px;
 
     display:
         flex;
@@ -602,16 +594,19 @@ h3 {
         center;
 
     border-radius:
-        11px;
+        12px;
 
     background:
-        #F0EBFF;
+        #EFEAFF;
 
     color:
-        #6645EA;
+        #6243E2;
 
     font-size:
-        0.95rem;
+        1rem;
+
+    font-weight:
+        750;
 
     margin-bottom:
         21px;
@@ -621,10 +616,10 @@ h3 {
 .result-label {
 
     color:
-        #8A8493;
+        #918B9A;
 
     font-size:
-        0.71rem;
+        0.70rem;
 
     font-weight:
         750;
@@ -643,13 +638,13 @@ h3 {
 .result-value {
 
     color:
-        #211E2C;
+        #221E30;
 
     font-size:
         1.52rem;
 
     font-weight:
-        770;
+        780;
 
     letter-spacing:
         -0.025em;
@@ -665,7 +660,7 @@ h3 {
 .result-subtext {
 
     color:
-        #8B8595;
+        #928C9C;
 
     font-size:
         0.86rem;
@@ -675,26 +670,25 @@ h3 {
 }
 
 
-/* ---------------------------------------------------------
+/* =========================================================
    CONFIDENCE BAR
---------------------------------------------------------- */
+========================================================= */
 
 .confidence-wrap {
 
-    background:
-        #FFFFFF;
-
-    border:
-        1px solid
-        #E8E4F0;
-
-    border-radius:
+    margin-top:
         16px;
 
     padding:
         17px 18px;
 
-    margin-top:
+    background:
+        #FFFFFF;
+
+    border:
+        1px solid #E8E4F0;
+
+    border-radius:
         16px;
 
     box-shadow:
@@ -711,14 +705,14 @@ h3 {
     justify-content:
         space-between;
 
-    margin-bottom:
-        11px;
-
     color:
         #716B7C;
 
     font-size:
         0.88rem;
+
+    margin-bottom:
+        11px;
 }
 
 
@@ -730,14 +724,14 @@ h3 {
     height:
         8px;
 
+    overflow:
+        hidden;
+
     background:
         #EEEAF5;
 
     border-radius:
-        100px;
-
-    overflow:
-        hidden;
+        999px;
 }
 
 
@@ -747,77 +741,75 @@ h3 {
         100%;
 
     border-radius:
-        100px;
+        999px;
 
     background:
 
         linear-gradient(
             90deg,
             #5E3FE1,
-            #9F89FF
+            #A28DFF
         );
 
     box-shadow:
-        0 0 15px
-        rgba(109,74,255,0.20);
+        0 0 16px
+        rgba(109,74,255,0.24);
 }
 
 
-/* ---------------------------------------------------------
-   ROUTING DECISION
---------------------------------------------------------- */
+/* =========================================================
+   ROUTING
+========================================================= */
 
 .route-auto {
+
+    margin-top:
+        12px;
+
+    padding:
+        24px;
 
     background:
 
         linear-gradient(
             135deg,
             #EAFBF5,
-            #FFFFFF 55%
+            #FFFFFF 58%
         );
 
     border:
-        1px solid
-        #CBEFE1;
+        1px solid #CDEFE2;
 
     border-radius:
         20px;
 
-    padding:
-        24px;
-
-    margin-top:
-        12px;
-
     box-shadow:
-        0 12px 30px
-        rgba(29,120,89,0.04);
+        0 10px 30px
+        rgba(30,110,82,0.04);
 }
 
 
 .route-review {
 
-    background:
-
-        linear-gradient(
-            135deg,
-            #FFF8E9,
-            #FFFFFF 55%
-        );
-
-    border:
-        1px solid
-        #F3DFC0;
-
-    border-radius:
-        20px;
+    margin-top:
+        12px;
 
     padding:
         24px;
 
-    margin-top:
-        12px;
+    background:
+
+        linear-gradient(
+            135deg,
+            #FFF8E8,
+            #FFFFFF 58%
+        );
+
+    border:
+        1px solid #F2DFC1;
+
+    border-radius:
+        20px;
 }
 
 
@@ -830,9 +822,6 @@ h3 {
     align-items:
         center;
 
-    gap:
-        8px;
-
     padding:
         7px 11px;
 
@@ -840,10 +829,13 @@ h3 {
         999px;
 
     font-size:
-        0.76rem;
+        0.74rem;
 
     font-weight:
-        720;
+        740;
+
+    letter-spacing:
+        0.04em;
 
     margin-bottom:
         13px;
@@ -853,33 +845,33 @@ h3 {
 .route-badge-auto {
 
     color:
-        #138C62;
+        #158A63;
 
     background:
-        #E3F8F0;
+        #DFF7EE;
 }
 
 
 .route-badge-review {
 
     color:
-        #B67819;
+        #A97018;
 
     background:
-        #FFF1D6;
+        #FFF0D2;
 }
 
 
 .route-title {
 
     color:
-        #211E2C;
+        #221E30;
 
     font-size:
         1.35rem;
 
     font-weight:
-        760;
+        770;
 
     letter-spacing:
         -0.02em;
@@ -898,15 +890,21 @@ h3 {
         0.96rem;
 
     line-height:
-        1.7;
+        1.72;
 }
 
 
-/* ---------------------------------------------------------
+/* =========================================================
    ALTERNATIVE CARDS
---------------------------------------------------------- */
+========================================================= */
 
 .alt-card {
+
+    min-height:
+        140px;
+
+    padding:
+        19px;
 
     background:
 
@@ -917,17 +915,10 @@ h3 {
         );
 
     border:
-        1px solid
-        #E8E4F0;
+        1px solid #E8E4F0;
 
     border-radius:
         18px;
-
-    padding:
-        19px;
-
-    min-height:
-        140px;
 
     box-shadow:
         0 10px 28px
@@ -941,10 +932,10 @@ h3 {
         #A09AA8;
 
     font-size:
-        0.7rem;
+        0.69rem;
 
     font-weight:
-        720;
+        730;
 
     letter-spacing:
         0.12em;
@@ -963,23 +954,23 @@ h3 {
         #24202F;
 
     font-size:
-        1.12rem;
+        1.14rem;
 
     font-weight:
-        720;
+        740;
 
     margin-bottom:
-        7px;
+        6px;
 }
 
 
 .alt-category {
 
     color:
-        #918B9A;
+        #96909F;
 
     font-size:
-        0.83rem;
+        0.82rem;
 
     margin-bottom:
         14px;
@@ -989,21 +980,27 @@ h3 {
 .alt-confidence {
 
     color:
-        #6445DF;
-
-    font-weight:
-        720;
+        #6344DE;
 
     font-size:
         0.91rem;
+
+    font-weight:
+        730;
 }
 
 
-/* ---------------------------------------------------------
-   INFO CARDS
---------------------------------------------------------- */
+/* =========================================================
+   INFORMATION CARDS
+========================================================= */
 
 .info-card {
+
+    height:
+        100%;
+
+    padding:
+        22px;
 
     background:
 
@@ -1014,17 +1011,10 @@ h3 {
         );
 
     border:
-        1px solid
-        #E8E4F0;
+        1px solid #E8E4F0;
 
     border-radius:
         19px;
-
-    padding:
-        22px;
-
-    height:
-        100%;
 
     box-shadow:
         0 10px 30px
@@ -1035,13 +1025,13 @@ h3 {
 .info-label {
 
     color:
-        #7051EF;
+        #6D4AFF;
 
     font-size:
-        0.71rem;
+        0.70rem;
 
     font-weight:
-        730;
+        740;
 
     letter-spacing:
         0.12em;
@@ -1063,7 +1053,7 @@ h3 {
         1.14rem;
 
     font-weight:
-        720;
+        740;
 
     margin-bottom:
         10px;
@@ -1079,17 +1069,21 @@ h3 {
         0.93rem;
 
     line-height:
-        1.7;
+        1.72;
 }
 
 
-/* ---------------------------------------------------------
+/* =========================================================
    STREAMLIT METRICS
---------------------------------------------------------- */
+========================================================= */
 
 [data-testid="stMetric"] {
 
+    padding:
+        18px;
+
     background:
+
         linear-gradient(
             145deg,
             #FFFFFF,
@@ -1097,14 +1091,10 @@ h3 {
         );
 
     border:
-        1px solid
-        #E8E4F0;
+        1px solid #E8E4F0;
 
     border-radius:
         17px;
-
-    padding:
-        18px;
 
     box-shadow:
         0 9px 26px
@@ -1122,27 +1112,26 @@ h3 {
 }
 
 
-/* ---------------------------------------------------------
-   DATAFRAMES
---------------------------------------------------------- */
+/* =========================================================
+   DATAFRAME
+========================================================= */
 
 [data-testid="stDataFrame"] {
-
-    border-radius:
-        16px;
 
     overflow:
         hidden;
 
     border:
-        1px solid
-        #E8E4F0;
+        1px solid #E8E4F0;
+
+    border-radius:
+        16px;
 }
 
 
-/* ---------------------------------------------------------
+/* =========================================================
    EXPANDER
---------------------------------------------------------- */
+========================================================= */
 
 [data-testid="stExpander"] {
 
@@ -1150,28 +1139,38 @@ h3 {
         #FFFFFF;
 
     border:
-        1px solid
-        #E7E3EF;
+        1px solid #E7E3EF;
 
     border-radius:
         16px;
 }
 
 
-/* ---------------------------------------------------------
+/* =========================================================
+   ALERTS
+========================================================= */
+
+[data-testid="stAlert"] {
+
+    border-radius:
+        16px;
+}
+
+
+/* =========================================================
    FOOTER
---------------------------------------------------------- */
+========================================================= */
 
 .decodr-footer {
-
-    text-align:
-        center;
 
     margin-top:
         45px;
 
+    text-align:
+        center;
+
     color:
-        #9892A0;
+        #9992A1;
 
     font-size:
         0.82rem;
@@ -1181,16 +1180,16 @@ h3 {
 .footer-dot {
 
     color:
-        #704FF0;
+        #6D4AFF;
 
     padding:
         0 8px;
 }
 
 
-/* ---------------------------------------------------------
-   RESPONSIVE
---------------------------------------------------------- */
+/* =========================================================
+   MOBILE
+========================================================= */
 
 @media(max-width:720px) {
 
@@ -1203,17 +1202,28 @@ h3 {
             1rem;
     }
 
+
     .section-title {
-        font-size: 1.65rem;
+
+        font-size:
+            1.65rem;
     }
+
 
     .stTabs [data-baseweb="tab"] {
 
         padding:
-            0 11px;
+            0 10px;
 
         font-size:
-            0.87rem;
+            0.86rem;
+    }
+
+
+    .result-card {
+
+        min-height:
+            150px;
     }
 }
 
@@ -1224,7 +1234,7 @@ h3 {
 
 
 # ============================================================
-# MODEL
+# LOAD PRIVATE MODEL
 # ============================================================
 
 @st.cache_resource
@@ -1255,14 +1265,14 @@ except Exception:
 
     st.error(
         "Decodr could not load the private classification model. "
-        "Check the Hugging Face access configuration."
+        "Please check the Hugging Face access configuration."
     )
 
     st.stop()
 
 
 # ============================================================
-# MODEL FUNCTIONS
+# MODEL HELPERS
 # ============================================================
 
 def clean_query(text):
@@ -1277,7 +1287,7 @@ def clean_query(text):
     )
 
 
-def model_label(class_id):
+def get_model_label(class_id):
 
     label = model.config.id2label.get(
         class_id
@@ -1302,12 +1312,12 @@ def readable_intent(intent):
 
 def predict_intent(query):
 
-    cleaned = clean_query(
+    cleaned_query = clean_query(
         query
     )
 
     inputs = tokenizer(
-        cleaned,
+        cleaned_query,
         return_tensors="pt",
         truncation=True,
         max_length=MAX_LENGTH,
@@ -1336,13 +1346,14 @@ def predict_intent(query):
         top_ids
     ):
 
-        intent = model_label(
+        intent = get_model_label(
             class_id.item()
         )
 
         predictions.append(
             {
-                "intent": intent,
+                "intent":
+                    intent,
 
                 "category":
                     INTENT_TO_CATEGORY.get(
@@ -1351,7 +1362,9 @@ def predict_intent(query):
                     ),
 
                 "confidence":
-                    probability.item(),
+                    float(
+                        probability.item()
+                    ),
             }
         )
 
@@ -1373,7 +1386,7 @@ def predict_intent(query):
 
 
 # ============================================================
-# CHART
+# PROBABILITY CHART
 # ============================================================
 
 def probability_chart(result):
@@ -1382,40 +1395,48 @@ def probability_chart(result):
 
     labels = [
         readable_intent(
-            x["intent"]
+            prediction["intent"]
         )
-        for x in predictions
+        for prediction in predictions
     ]
 
     values = [
-        x["confidence"]
-        for x in predictions
+        prediction["confidence"]
+        for prediction in predictions
+    ]
+
+    colors = [
+        "#DCD6F1",
+        "#CEC5F0",
+        "#B7A8EF",
+        "#9983F3",
+        "#6D4AFF",
     ]
 
     fig = go.Figure()
 
     fig.add_trace(
         go.Bar(
-            x=values[::-1],
-            y=labels[::-1],
 
-            orientation="h",
+            x=
+                values[::-1],
+
+            y=
+                labels[::-1],
+
+            orientation=
+                "h",
 
             text=[
-                f"{v:.2%}"
-                for v in values[::-1]
+                f"{value:.2%}"
+                for value in values[::-1]
             ],
 
-            textposition="outside",
+            textposition=
+                "outside",
 
             marker=dict(
-                color=[
-                    "#DAD4ED",
-                    "#CCC3EB",
-                    "#B9AAEF",
-                    "#9983F3",
-                    "#6D4AFF",
-                ]
+                color=colors
             ),
 
             hovertemplate=(
@@ -1426,27 +1447,35 @@ def probability_chart(result):
         )
     )
 
+    max_value = max(
+        values
+    )
+
     fig.update_layout(
 
-        height=330,
+        height=
+            325,
 
         margin=dict(
             l=10,
-            r=70,
-            t=20,
-            b=15,
+            r=75,
+            t=15,
+            b=10,
         ),
 
-        paper_bgcolor="rgba(0,0,0,0)",
+        paper_bgcolor=
+            "rgba(0,0,0,0)",
 
-        plot_bgcolor="rgba(0,0,0,0)",
+        plot_bgcolor=
+            "rgba(0,0,0,0)",
 
         font=dict(
-            color="#645E70",
+            color="#665F72",
             family="Inter, Arial, sans-serif",
         ),
 
-        showlegend=False,
+        showlegend=
+            False,
 
         xaxis=dict(
 
@@ -1454,18 +1483,21 @@ def probability_chart(result):
                 0,
                 min(
                     1.08,
-                    max(values) + 0.12,
+                    max_value + 0.13,
                 )
             ],
 
-            showgrid=True,
+            showgrid=
+                True,
 
             gridcolor=
-                "rgba(74,61,105,0.07)",
+                "rgba(72,61,100,0.07)",
 
-            tickformat=".0%",
+            tickformat=
+                ".0%",
 
-            zeroline=False,
+            zeroline=
+                False,
         ),
 
         yaxis=dict(
@@ -1477,7 +1509,7 @@ def probability_chart(result):
 
 
 # ============================================================
-# PREMIUM PURPLE HERO
+# PREMIUM ANIMATED HERO
 # ============================================================
 
 motion_state = (
@@ -1486,8 +1518,14 @@ motion_state = (
     else "running"
 )
 
+reduce_motion_js = (
+    "true"
+    if reduce_motion
+    else "false"
+)
 
-hero_html = f"""
+
+hero_html = """
 <!DOCTYPE html>
 
 <html>
@@ -1496,12 +1534,13 @@ hero_html = f"""
 
 <style>
 
-* {{
+* {
     box-sizing: border-box;
-}}
+}
+
 
 html,
-body {{
+body {
 
     margin: 0;
     padding: 0;
@@ -1516,10 +1555,10 @@ body {{
         BlinkMacSystemFont,
         "Segoe UI",
         sans-serif;
-}}
+}
 
 
-.hero {{
+.hero {
 
     position: relative;
 
@@ -1529,26 +1568,26 @@ body {{
 
     overflow: hidden;
 
-    border-radius: 27px;
+    border-radius: 28px;
 
     background:
 
         radial-gradient(
-            circle at 50% -30%,
-            rgba(115,77,255,0.18),
-            transparent 48%
+            circle at 50% -25%,
+            rgba(109,74,255,0.20),
+            transparent 45%
         ),
 
         radial-gradient(
-            circle at 90% 70%,
-            rgba(190,176,255,0.24),
+            circle at 92% 75%,
+            rgba(195,182,255,0.25),
             transparent 38%
         ),
 
         radial-gradient(
             circle at 5% 80%,
-            rgba(224,217,255,0.42),
-            transparent 35%
+            rgba(229,223,255,0.50),
+            transparent 34%
         ),
 
         linear-gradient(
@@ -1562,12 +1601,16 @@ body {{
         rgba(109,74,255,0.13);
 
     box-shadow:
+
+        0 20px 55px
+        rgba(65,44,130,0.07),
+
         inset 0 1px 0
-        rgba(255,255,255,0.9);
-}}
+        rgba(255,255,255,0.95);
+}
 
 
-.hero::after {{
+.hero::after {
 
     content: "";
 
@@ -1575,24 +1618,22 @@ body {{
 
     inset: 0;
 
+    pointer-events: none;
+
+    opacity: 0.40;
+
     background:
 
         linear-gradient(
             110deg,
             transparent 15%,
-            rgba(255,255,255,0.58) 48%,
-            transparent 70%
+            rgba(255,255,255,0.72) 48%,
+            transparent 72%
         );
-
-    opacity: 0.35;
-
-    pointer-events: none;
-}}
+}
 
 
-/* PARTICLES */
-
-#particles {{
+#particles {
 
     position: absolute;
 
@@ -1601,12 +1642,10 @@ body {{
     width: 100%;
 
     height: 100%;
-}}
+}
 
 
-/* WAVES */
-
-.waves {{
+.wave-container {
 
     position: absolute;
 
@@ -1616,11 +1655,11 @@ body {{
 
     height: 100%;
 
-    opacity: 0.57;
-}}
+    opacity: 0.64;
+}
 
 
-.wave {{
+.wave {
 
     fill: none;
 
@@ -1629,96 +1668,95 @@ body {{
     stroke-linecap: round;
 
     animation:
-
         waveMove
-        10s
+        9s
         ease-in-out
         infinite;
 
     animation-play-state:
-        {motion_state};
-}}
+        __MOTION_STATE__;
+}
 
 
-.wave.purple {{
-
-    stroke:
-        rgba(109,74,255,0.32);
-}}
+.wave.primary {
+    stroke: rgba(109,74,255,0.34);
+}
 
 
-.wave.light {{
-
-    stroke:
-        rgba(159,137,255,0.20);
-}}
+.wave.secondary {
+    stroke: rgba(156,133,255,0.20);
+}
 
 
-.wave.grey {{
-
-    stroke:
-        rgba(90,83,106,0.12);
-}}
+.wave.grey {
+    stroke: rgba(80,72,98,0.11);
+}
 
 
-.wave:nth-child(2) {{
-    animation-delay: -1s;
-}}
+.wave:nth-child(2) {
+    animation-delay: -0.8s;
+}
 
-.wave:nth-child(3) {{
-    animation-delay: -2s;
-}}
+.wave:nth-child(3) {
+    animation-delay: -1.6s;
+}
 
-.wave:nth-child(4) {{
-    animation-delay: -3s;
-}}
+.wave:nth-child(4) {
+    animation-delay: -2.4s;
+}
 
-.wave:nth-child(5) {{
+.wave:nth-child(5) {
+    animation-delay: -3.2s;
+}
+
+.wave:nth-child(6) {
     animation-delay: -4s;
-}}
+}
 
-.wave:nth-child(6) {{
-    animation-delay: -5s;
-}}
+.wave:nth-child(7) {
+    animation-delay: -4.8s;
+}
 
-.wave:nth-child(7) {{
-    animation-delay: -6s;
-}}
+.wave:nth-child(8) {
+    animation-delay: -5.6s;
+}
 
-.wave:nth-child(8) {{
-    animation-delay: -7s;
-}}
+.wave:nth-child(9) {
+    animation-delay: -6.4s;
+}
 
-.wave:nth-child(9) {{
+.wave:nth-child(10) {
+    animation-delay: -7.2s;
+}
+
+.wave:nth-child(11) {
     animation-delay: -8s;
-}}
-
-.wave:nth-child(10) {{
-    animation-delay: -9s;
-}}
+}
 
 
-@keyframes waveMove {{
+@keyframes waveMove {
 
-    0%,100% {{
+    0%,
+    100% {
 
         transform:
-            translateX(-6px)
+            translateX(-7px)
             translateY(0px);
-    }}
+    }
 
-    50% {{
+
+    50% {
 
         transform:
-            translateX(13px)
+            translateX(14px)
             translateY(-8px);
-    }}
-}}
+    }
+}
 
 
 /* HERO CONTENT */
 
-.hero-content {{
+.hero-content {
 
     position: relative;
 
@@ -1735,13 +1773,13 @@ body {{
     justify-content: center;
 
     padding:
-        48px 30px;
+        45px 30px;
 
     text-align: center;
-}}
+}
 
 
-.brand-line {{
+.brand-row {
 
     display: flex;
 
@@ -1751,29 +1789,28 @@ body {{
 
     gap: 17px;
 
-    margin-bottom:
-        13px;
-}}
+    margin-bottom: 13px;
+}
 
 
 /* LOGO */
 
-.logo {{
+.logo {
 
-    width: 73px;
+    width: 72px;
 
-    height: 73px;
+    height: 72px;
 
     filter:
 
         drop-shadow(
             0 12px 24px
-            rgba(109,74,255,0.18)
+            rgba(109,74,255,0.20)
         );
-}}
+}
 
 
-.logo-flow {{
+.logo-flow {
 
     animation:
         logoPulse
@@ -1782,42 +1819,44 @@ body {{
         infinite;
 
     animation-play-state:
-        {motion_state};
-}}
+        __MOTION_STATE__;
+}
 
 
-@keyframes logoPulse {{
+@keyframes logoPulse {
 
-    0%,100% {{
+    0%,
+    100% {
         opacity: 0.72;
-    }}
+    }
 
-    50% {{
+
+    50% {
         opacity: 1;
-    }}
-}}
+    }
+}
 
 
-.brand-name {{
+.brand-name {
 
     color:
         #251B47;
 
     font-size:
-        63px;
+        64px;
 
     font-weight:
-        790;
+        800;
 
     letter-spacing:
-        -3.6px;
+        -3.8px;
 
     line-height:
         1;
-}}
+}
 
 
-.tagline {{
+.tagline {
 
     color:
         #352A56;
@@ -1833,10 +1872,10 @@ body {{
 
     margin-bottom:
         12px;
-}}
+}
 
 
-.description {{
+.description {
 
     max-width:
         690px;
@@ -1849,10 +1888,10 @@ body {{
 
     line-height:
         1.65;
-}}
+}
 
 
-.status {{
+.status {
 
     margin-top:
         22px;
@@ -1866,21 +1905,11 @@ body {{
     gap:
         8px;
 
-    border:
-        1px solid
-        rgba(109,74,255,0.12);
-
-    background:
-        rgba(255,255,255,0.65);
+    padding:
+        8px 13px;
 
     color:
         #756D82;
-
-    border-radius:
-        100px;
-
-    padding:
-        8px 13px;
 
     font-size:
         11px;
@@ -1888,12 +1917,22 @@ body {{
     letter-spacing:
         0.04em;
 
+    background:
+        rgba(255,255,255,0.64);
+
+    border:
+        1px solid
+        rgba(109,74,255,0.12);
+
+    border-radius:
+        999px;
+
     backdrop-filter:
         blur(10px);
-}}
+}
 
 
-.dot {{
+.status-dot {
 
     width:
         6px;
@@ -1910,55 +1949,75 @@ body {{
     box-shadow:
         0 0 12px
         rgba(109,74,255,0.55);
-}}
+}
 
 
 /* MOBILE */
 
-@media(max-width:650px) {{
+@media(max-width:650px) {
 
-    .hero {{
-        min-height: 335px;
-    }}
+    .hero {
 
-    .hero-content {{
+        min-height:
+            335px;
+    }
 
-        min-height: 335px;
+
+    .hero-content {
+
+        min-height:
+            335px;
 
         padding:
-            36px 20px;
-    }}
+            35px 20px;
+    }
 
-    .brand-line {{
-        gap: 10px;
-    }}
 
-    .logo {{
+    .brand-row {
 
-        width: 51px;
-        height: 51px;
-    }}
+        gap:
+            10px;
+    }
 
-    .brand-name {{
 
-        font-size: 44px;
+    .logo {
+
+        width:
+            51px;
+
+        height:
+            51px;
+    }
+
+
+    .brand-name {
+
+        font-size:
+            44px;
 
         letter-spacing:
             -2.5px;
-    }}
+    }
 
-    .tagline {{
-        font-size: 17px;
-    }}
 
-    .description {{
-        font-size: 13px;
-    }}
-}}
+    .tagline {
+
+        font-size:
+            17px;
+    }
+
+
+    .description {
+
+        font-size:
+            13px;
+    }
+}
 
 </style>
 
 </head>
+
 
 <body>
 
@@ -1970,119 +2029,75 @@ body {{
 
 
 <svg
-    class="waves"
+    class="wave-container"
     viewBox="0 0 1200 365"
     preserveAspectRatio="none"
 >
 
 
 <path
-    class="wave purple"
-    d="
-    M-100 290
-    C110 110 270 320 450 170
-    S720 55 900 190
-    S1120 285 1300 80
-    "
+    class="wave primary"
+    d="M-100 290 C100 100 280 325 455 170 S720 50 900 190 S1120 285 1300 80"
 />
 
 
 <path
-    class="wave light"
-    d="
-    M-100 302
-    C110 122 270 332 450 182
-    S720 67 900 202
-    S1120 297 1300 92
-    "
+    class="wave secondary"
+    d="M-100 302 C100 112 280 337 455 182 S720 62 900 202 S1120 297 1300 92"
 />
 
 
 <path
     class="wave grey"
-    d="
-    M-100 314
-    C110 134 270 344 450 194
-    S720 79 900 214
-    S1120 309 1300 104
-    "
+    d="M-100 314 C100 124 280 349 455 194 S720 74 900 214 S1120 309 1300 104"
 />
 
 
 <path
-    class="wave purple"
-    d="
-    M-100 326
-    C110 146 270 356 450 206
-    S720 91 900 226
-    S1120 321 1300 116
-    "
+    class="wave primary"
+    d="M-100 326 C100 136 280 361 455 206 S720 86 900 226 S1120 321 1300 116"
 />
 
 
 <path
-    class="wave light"
-    d="
-    M-100 338
-    C110 158 270 368 450 218
-    S720 103 900 238
-    S1120 333 1300 128
-    "
+    class="wave secondary"
+    d="M-100 338 C100 148 280 373 455 218 S720 98 900 238 S1120 333 1300 128"
 />
 
 
 <path
     class="wave grey"
-    d="
-    M-100 278
-    C110 98 270 308 450 158
-    S720 43 900 178
-    S1120 273 1300 68
-    "
+    d="M-100 278 C100 88 280 313 455 158 S720 38 900 178 S1120 273 1300 68"
 />
 
 
 <path
-    class="wave purple"
-    d="
-    M-100 266
-    C110 86 270 296 450 146
-    S720 31 900 166
-    S1120 261 1300 56
-    "
+    class="wave primary"
+    d="M-100 266 C100 76 280 301 455 146 S720 26 900 166 S1120 261 1300 56"
 />
 
 
 <path
-    class="wave light"
-    d="
-    M-100 254
-    C110 74 270 284 450 134
-    S720 19 900 154
-    S1120 249 1300 44
-    "
+    class="wave secondary"
+    d="M-100 254 C100 64 280 289 455 134 S720 14 900 154 S1120 249 1300 44"
 />
 
 
 <path
     class="wave grey"
-    d="
-    M-100 242
-    C110 62 270 272 450 122
-    S720 7 900 142
-    S1120 237 1300 32
-    "
+    d="M-100 242 C100 52 280 277 455 122 S720 2 900 142 S1120 237 1300 32"
 />
 
 
 <path
-    class="wave purple"
-    d="
-    M-100 230
-    C110 50 270 260 450 110
-    S720 -5 900 130
-    S1120 225 1300 20
-    "
+    class="wave primary"
+    d="M-100 230 C100 40 280 265 455 110 S720 -10 900 130 S1120 225 1300 20"
+/>
+
+
+<path
+    class="wave secondary"
+    d="M-100 218 C100 28 280 253 455 98 S720 -22 900 118 S1120 213 1300 8"
 />
 
 
@@ -2092,10 +2107,8 @@ body {{
 <div class="hero-content">
 
 
-<div class="brand-line">
+<div class="brand-row">
 
-
-<!-- CUSTOM DECODR LOGO -->
 
 <svg
     class="logo"
@@ -2108,7 +2121,7 @@ body {{
 
 
 <linearGradient
-    id="dBody"
+    id="logoBody"
     x1="0"
     y1="0"
     x2="1"
@@ -2117,26 +2130,26 @@ body {{
 
 <stop
     offset="0%"
-    stop-color="#7658FF"
+    stop-color="#8064FF"
 />
 
 <stop
     offset="100%"
-    stop-color="#4D2ECF"
+    stop-color="#4E2FCB"
 />
 
 </linearGradient>
 
 
 <linearGradient
-    id="flow"
+    id="signalGradient"
     x1="0"
     x2="1"
 >
 
 <stop
     offset="0%"
-    stop-color="#C6B9FF"
+    stop-color="#C9BEFF"
 />
 
 <stop
@@ -2150,44 +2163,23 @@ body {{
 </defs>
 
 
-<!-- D -->
-
+<!-- MAIN D -->
 
 <path
-    d="
-    M31 13
-    H61
-    C93 13
-    108 31
-    108 60
-    C108 89
-    93 107
-    61 107
-    H31
-    Z
-    "
-    fill="url(#dBody)"
+    d="M31 13 H61 C93 13 108 31 108 60 C108 89 93 107 61 107 H31 Z"
+    fill="url(#logoBody)"
 />
 
 
+<!-- INNER SPACE -->
+
 <path
-    d="
-    M46 29
-    H61
-    C79 29
-    91 40
-    91 60
-    C91 80
-    79 91
-    61 91
-    H46
-    Z
-    "
+    d="M46 29 H61 C79 29 91 40 91 60 C91 80 79 91 61 91 H46 Z"
     fill="#F9F7FF"
 />
 
 
-<!-- ROUTING STREAMS -->
+<!-- SIGNAL FLOW -->
 
 <g class="logo-flow">
 
@@ -2196,7 +2188,7 @@ body {{
     cx="15"
     cy="34"
     r="5"
-    fill="#7B5CFF"
+    fill="#7658FF"
 />
 
 
@@ -2204,7 +2196,7 @@ body {{
     cx="15"
     cy="60"
     r="5"
-    fill="#B8A9FF"
+    fill="#B4A4FF"
 />
 
 
@@ -2212,29 +2204,21 @@ body {{
     cx="15"
     cy="86"
     r="5"
-    fill="#7B5CFF"
+    fill="#7658FF"
 />
 
 
 <path
-    d="
-    M20 34
-    C42 34
-    43 57
-    62 60
-    "
+    d="M20 34 C43 34 43 57 62 60"
     fill="none"
-    stroke="url(#flow)"
+    stroke="url(#signalGradient)"
     stroke-width="5"
     stroke-linecap="round"
 />
 
 
 <path
-    d="
-    M20 60
-    H62
-    "
+    d="M20 60 H62"
     fill="none"
     stroke="#9C86FF"
     stroke-width="5"
@@ -2243,14 +2227,9 @@ body {{
 
 
 <path
-    d="
-    M20 86
-    C42 86
-    43 63
-    62 60
-    "
+    d="M20 86 C43 86 43 63 62 60"
     fill="none"
-    stroke="url(#flow)"
+    stroke="url(#signalGradient)"
     stroke-width="5"
     stroke-linecap="round"
 />
@@ -2265,10 +2244,8 @@ body {{
 
 
 <path
-    d="
-    M71 60
-    H95
-    "
+    d="M71 60 H95"
+    fill="none"
     stroke="#6D4AFF"
     stroke-width="5"
     stroke-linecap="round"
@@ -2276,11 +2253,7 @@ body {{
 
 
 <path
-    d="
-    M91 52
-    L101 60
-    L91 68
-    "
+    d="M91 52 L101 60 L91 68"
     fill="none"
     stroke="#6D4AFF"
     stroke-width="5"
@@ -2318,7 +2291,7 @@ with confidence-based automation and human escalation.
 
 <div class="status">
 
-<span class="dot"></span>
+<span class="status-dot"></span>
 
 Fine-tuned RoBERTa · 27 intents · 11 business categories
 
@@ -2335,7 +2308,7 @@ Fine-tuned RoBERTa · 27 intents · 11 business categories
 
 
 const reduceMotion =
-    {"true" if reduce_motion else "false"};
+    __REDUCE_MOTION__;
 
 
 const canvas =
@@ -2349,10 +2322,11 @@ const ctx =
 let particles = [];
 
 let width = 0;
+
 let height = 0;
 
 
-function resize() {{
+function resizeCanvas() {
 
     const rect =
         canvas.getBoundingClientRect();
@@ -2380,10 +2354,10 @@ function resize() {{
         0,
         0
     );
-}}
+}
 
 
-function createParticles() {{
+function createParticles() {
 
     particles = [];
 
@@ -2396,29 +2370,30 @@ function createParticles() {{
             )
         );
 
+
     for (
         let i = 0;
         i < count;
         i++
-    ) {{
+    ) {
 
-        particles.push({{
+        particles.push({
 
             x:
-                Math.random() * width,
+                Math.random()
+                * width,
 
             y:
-                Math.random() * height,
+                Math.random()
+                * height,
 
             vx:
-                (
-                    Math.random() - 0.5
-                ) * 0.15,
+                (Math.random() - 0.5)
+                * 0.15,
 
             vy:
-                (
-                    Math.random() - 0.5
-                ) * 0.11,
+                (Math.random() - 0.5)
+                * 0.11,
 
             size:
                 Math.random()
@@ -2427,19 +2402,18 @@ function createParticles() {{
 
             alpha:
                 Math.random()
-                * 0.25
+                * 0.24
                 + 0.06,
 
             purple:
                 Math.random()
-                > 0.55
+                > 0.50
+        });
+    }
+}
 
-        }});
-    }}
-}}
 
-
-function draw() {{
+function drawParticles() {
 
     ctx.clearRect(
         0,
@@ -2450,70 +2424,83 @@ function draw() {{
 
 
     for (
-        const p of particles
-    ) {{
+        const particle
+        of particles
+    ) {
 
-        if (!reduceMotion) {{
+        if (!reduceMotion) {
 
-            p.x += p.vx;
+            particle.x +=
+                particle.vx;
 
-            p.y += p.vy;
+            particle.y +=
+                particle.vy;
 
 
             if (
-                p.x < -10
-            )
-                p.x =
+                particle.x < -10
+            ) {
+                particle.x =
                     width + 10;
+            }
 
 
             if (
-                p.x > width + 10
-            )
-                p.x =
+                particle.x > width + 10
+            ) {
+                particle.x =
                     -10;
+            }
 
 
             if (
-                p.y < -10
-            )
-                p.y =
+                particle.y < -10
+            ) {
+                particle.y =
                     height + 10;
+            }
 
 
             if (
-                p.y > height + 10
-            )
-                p.y =
+                particle.y > height + 10
+            ) {
+                particle.y =
                     -10;
-        }}
+            }
+        }
 
 
         ctx.beginPath();
 
 
         ctx.arc(
-
-            p.x,
-            p.y,
-            p.size,
+            particle.x,
+            particle.y,
+            particle.size,
             0,
             Math.PI * 2
-
         );
 
 
-        ctx.fillStyle =
+        if (
+            particle.purple
+        ) {
 
-            p.purple
+            ctx.fillStyle =
+                "rgba(109,74,255,"
+                + particle.alpha
+                + ")";
 
-            ? `rgba(109,74,255,${{p.alpha}})`
+        } else {
 
-            : `rgba(120,112,140,${{p.alpha}})`;
+            ctx.fillStyle =
+                "rgba(126,118,145,"
+                + particle.alpha
+                + ")";
+        }
 
 
         ctx.fill();
-
     }
 
 
@@ -2521,26 +2508,28 @@ function draw() {{
         let i = 0;
         i < particles.length;
         i++
-    ) {{
+    ) {
 
         for (
             let j = i + 1;
             j < particles.length;
             j++
-        ) {{
+        ) {
 
-            const a =
+            const first =
                 particles[i];
 
-            const b =
+            const second =
                 particles[j];
 
 
             const dx =
-                a.x - b.x;
+                first.x
+                - second.x;
 
             const dy =
-                a.y - b.y;
+                first.y
+                - second.y;
 
 
             const distance =
@@ -2552,33 +2541,35 @@ function draw() {{
 
             if (
                 distance < 95
-            ) {{
+            ) {
 
                 const opacity =
                     (
-                        1 -
-                        distance / 95
-                    ) * 0.035;
+                        1
+                        - distance / 95
+                    )
+                    * 0.035;
 
 
                 ctx.beginPath();
 
 
                 ctx.moveTo(
-                    a.x,
-                    a.y
+                    first.x,
+                    first.y
                 );
 
 
                 ctx.lineTo(
-                    b.x,
-                    b.y
+                    second.x,
+                    second.y
                 );
 
 
                 ctx.strokeStyle =
-
-                    `rgba(109,74,255,${{opacity}})`;
+                    "rgba(109,74,255,"
+                    + opacity
+                    + ")";
 
 
                 ctx.lineWidth =
@@ -2586,40 +2577,32 @@ function draw() {{
 
 
                 ctx.stroke();
-
-            }}
-
-        }}
-
+            }
+        }
     }
 
 
     requestAnimationFrame(
-        draw
+        drawParticles
     );
-
 }
 
 
-resize();
+resizeCanvas();
 
 createParticles();
 
-draw();
+drawParticles();
 
 
 window.addEventListener(
-
     "resize",
+    function () {
 
-    () => {{
-
-        resize();
+        resizeCanvas();
 
         createParticles();
-
-    }}
-
+    }
 );
 
 
@@ -2632,15 +2615,27 @@ window.addEventListener(
 """
 
 
+hero_html = hero_html.replace(
+    "__MOTION_STATE__",
+    motion_state,
+)
+
+
+hero_html = hero_html.replace(
+    "__REDUCE_MOTION__",
+    reduce_motion_js,
+)
+
+
 components.html(
     hero_html,
-    height=380,
+    height=385,
     scrolling=False,
 )
 
 
 # ============================================================
-# TABS
+# NAVIGATION
 # ============================================================
 
 try_tab, insights_tab, about_tab = st.tabs(
@@ -2658,11 +2653,16 @@ try_tab, insights_tab, about_tab = st.tabs(
 
 with try_tab:
 
+
     st.markdown(
-        '<div class="kicker">Customer Query</div>'
+        '<div class="kicker">'
+        'Customer Query'
+        '</div>'
+
         '<div class="section-title">'
         'What does the customer need?'
         '</div>'
+
         '<div class="section-copy">'
         'Enter a customer-service request in natural language. '
         'Decodr identifies the underlying intent and evaluates '
@@ -2685,14 +2685,15 @@ with try_tab:
     )
 
 
-    analyze = st.button(
+    analyze_button = st.button(
         "Analyze Intent  →",
         type="primary",
         use_container_width=True,
     )
 
 
-    if analyze:
+    if analyze_button:
+
 
         if not st.session_state.query_text.strip():
 
@@ -2700,11 +2701,14 @@ with try_tab:
                 "Enter a customer query first."
             )
 
+
         else:
+
 
             with st.spinner(
                 "Decoding customer intent..."
             ):
+
 
                 st.session_state.prediction_result = (
                     predict_intent(
@@ -2721,14 +2725,14 @@ with try_tab:
     if result:
 
 
-        safe_intent = html.escape(
+        safe_intent = html_lib.escape(
             readable_intent(
                 result["intent"]
             )
         )
 
 
-        safe_category = html.escape(
+        safe_category = html_lib.escape(
             result["category"]
         )
 
@@ -2751,6 +2755,7 @@ with try_tab:
             '<div class="kicker">'
             'Classification Result'
             '</div>'
+
             '<div class="section-title">'
             'Decodr’s interpretation'
             '</div>',
@@ -2758,81 +2763,119 @@ with try_tab:
         )
 
 
-        col1, col2, col3 = st.columns(
-            3
+        column1, column2, column3 = (
+            st.columns(3)
         )
 
 
-        with col1:
+        with column1:
+
 
             st.markdown(
-                f'<div class="result-card">'
-                f'<div class="result-icon">◆</div>'
-                f'<div class="result-label">'
-                f'Predicted Intent'
-                f'</div>'
-                f'<div class="result-value">'
-                f'{safe_intent}'
-                f'</div>'
-                f'<div class="result-subtext">'
-                f'Most likely customer need'
-                f'</div>'
-                f'</div>',
+                '<div class="result-card">'
+
+                '<div class="result-icon">'
+                '◆'
+                '</div>'
+
+                '<div class="result-label">'
+                'Predicted Intent'
+                '</div>'
+
+                '<div class="result-value">'
+                + safe_intent +
+                '</div>'
+
+                '<div class="result-subtext">'
+                'Most likely customer need'
+                '</div>'
+
+                '</div>',
                 unsafe_allow_html=True,
             )
 
 
-        with col2:
+        with column2:
+
 
             st.markdown(
-                f'<div class="result-card">'
-                f'<div class="result-icon">↳</div>'
-                f'<div class="result-label">'
-                f'Business Category'
-                f'</div>'
-                f'<div class="result-value">'
-                f'{safe_category}'
-                f'</div>'
-                f'<div class="result-subtext">'
-                f'Suggested operational workflow'
-                f'</div>'
-                f'</div>',
+                '<div class="result-card">'
+
+                '<div class="result-icon">'
+                '↳'
+                '</div>'
+
+                '<div class="result-label">'
+                'Business Category'
+                '</div>'
+
+                '<div class="result-value">'
+                + safe_category +
+                '</div>'
+
+                '<div class="result-subtext">'
+                'Suggested operational workflow'
+                '</div>'
+
+                '</div>',
                 unsafe_allow_html=True,
             )
 
 
-        with col3:
+        with column3:
+
 
             st.markdown(
-                f'<div class="result-card">'
-                f'<div class="result-icon">%</div>'
-                f'<div class="result-label">'
-                f'Model Confidence'
-                f'</div>'
-                f'<div class="result-value">'
-                f'{confidence:.2%}'
-                f'</div>'
-                f'<div class="result-subtext">'
-                f'Operating threshold: '
-                f'{AUTO_THRESHOLD:.2%}'
-                f'</div>'
-                f'</div>',
+                '<div class="result-card">'
+
+                '<div class="result-icon">'
+                '%'
+                '</div>'
+
+                '<div class="result-label">'
+                'Model Confidence'
+                '</div>'
+
+                '<div class="result-value">'
+                + f"{confidence:.2%}" +
+                '</div>'
+
+                '<div class="result-subtext">'
+                'Operating threshold: '
+                + f"{AUTO_THRESHOLD:.2%}" +
+                '</div>'
+
+                '</div>',
                 unsafe_allow_html=True,
             )
 
 
         st.markdown(
-            f'<div class="confidence-wrap">'
-            f'<div class="confidence-head">'
-            f'<span>Prediction confidence</span>'
-            f'<span>{confidence:.2%}</span>'
-            f'</div>'
-            f'<div class="confidence-track">'
-            f'<div class="confidence-fill" '
-            f'style="width:{confidence_percentage:.2f}%">'
-            f'</div>'
-            f'</div>'
-            f'</div>',
+            '<div class="confidence-wrap">'
+
+            '<div class="confidence-head">'
+
+            '<span>'
+            'Prediction confidence'
+            '</span>'
+
+            '<span>'
+            + f"{confidence:.2%}" +
+            '</span>'
+
+            '</div>'
+
+            '<div class="confidence-track">'
+
+            '<div class="confidence-fill" '
+            'style="width:'
+            + f"{confidence_percentage:.2f}%"
+            + '">'
+            '</div>'
+
+            '</div>'
+
+            '</div>',
             unsafe_allow_html=True,
         )
 
@@ -2853,25 +2896,48 @@ with try_tab:
 
 
             st.markdown(
-                f'<div class="route-auto">'
-                f'<div class="route-badge-auto">'
-                f'● AUTOMATION CANDIDATE'
-                f'</div>'
-                f'<div class="route-title">'
-                f'Automatic routing recommended'
-                f'</div>'
-                f'<div class="route-copy">'
-                f'The predicted intent is '
-                f'<strong>{safe_intent}</strong> '
-                f'with confidence of '
-                f'<strong>{confidence:.2%}</strong>. '
-                f'This exceeds the validation-selected '
-                f'<strong>{AUTO_THRESHOLD:.2%}</strong> '
-                f'operating threshold, making the query '
-                f'eligible for routing to the '
-                f'<strong>{safe_category}</strong> workflow.'
-                f'</div>'
-                f'</div>',
+                '<div class="route-auto">'
+
+                '<div class="route-badge-auto">'
+                '● AUTOMATION CANDIDATE'
+                '</div>'
+
+                '<div class="route-title">'
+                'Automatic routing recommended'
+                '</div>'
+
+                '<div class="route-copy">'
+
+                'The predicted intent is '
+
+                '<strong>'
+                + safe_intent +
+                '</strong> '
+
+                'with a confidence of '
+
+                '<strong>'
+                + f"{confidence:.2%}" +
+                '</strong>. '
+
+                'This exceeds the validation-selected '
+
+                '<strong>'
+                + f"{AUTO_THRESHOLD:.2%}" +
+                '</strong> '
+
+                'operating threshold, so the query is '
+                'eligible to be routed to the '
+
+                '<strong>'
+                + safe_category +
+                '</strong> '
+
+                'workflow.'
+
+                '</div>'
+
+                '</div>',
                 unsafe_allow_html=True,
             )
 
@@ -2880,27 +2946,51 @@ with try_tab:
 
 
             st.markdown(
-                f'<div class="route-review">'
-                f'<div class="route-badge-review">'
-                f'● REVIEW REQUIRED'
-                f'</div>'
-                f'<div class="route-title">'
-                f'Human review recommended'
-                f'</div>'
-                f'<div class="route-copy">'
-                f'The predicted intent is '
-                f'<strong>{safe_intent}</strong>, '
-                f'but confidence of '
-                f'<strong>{confidence:.2%}</strong> '
-                f'is below the validation-selected '
-                f'<strong>{AUTO_THRESHOLD:.2%}</strong> '
-                f'operating threshold. The query should '
-                f'therefore be reviewed before routing.'
-                f'</div>'
-                f'</div>',
+                '<div class="route-review">'
+
+                '<div class="route-badge-review">'
+                '● REVIEW REQUIRED'
+                '</div>'
+
+                '<div class="route-title">'
+                'Human review recommended'
+                '</div>'
+
+                '<div class="route-copy">'
+
+                'The predicted intent is '
+
+                '<strong>'
+                + safe_intent +
+                '</strong>, '
+
+                'but the confidence of '
+
+                '<strong>'
+                + f"{confidence:.2%}" +
+                '</strong> '
+
+                'is below the validation-selected '
+
+                '<strong>'
+                + f"{AUTO_THRESHOLD:.2%}" +
+                '</strong> '
+
+                'operating threshold. '
+                'The query should therefore be '
+                'reviewed before an operational '
+                'routing decision is made.'
+
+                '</div>'
+
+                '</div>',
                 unsafe_allow_html=True,
             )
 
+
+        # ====================================================
+        # ALTERNATIVES
+        # ====================================================
 
         if show_alternatives:
 
@@ -2913,76 +3003,126 @@ with try_tab:
                 '<div class="kicker">'
                 'Alternative Interpretations'
                 '</div>'
+
                 '<div class="section-title" '
                 'style="font-size:1.55rem;">'
                 'Other possibilities considered'
                 '</div>'
+
                 '<div class="section-copy">'
-                'The next highest-probability predictions '
-                'provide additional context around model uncertainty.'
+                'The next highest-probability predictions provide '
+                'additional context around model uncertainty.'
                 '</div>',
                 unsafe_allow_html=True,
             )
 
 
-            alt1 = (
+            second_prediction = (
                 result["predictions"][1]
             )
 
 
-            alt2 = (
+            third_prediction = (
                 result["predictions"][2]
             )
 
 
-            alternative_col1, alternative_col2 = (
+            alt_column1, alt_column2 = (
                 st.columns(2)
             )
 
 
-            with alternative_col1:
+            with alt_column1:
+
+
+                second_intent = (
+                    html_lib.escape(
+                        readable_intent(
+                            second_prediction["intent"]
+                        )
+                    )
+                )
+
+
+                second_category = (
+                    html_lib.escape(
+                        second_prediction["category"]
+                    )
+                )
 
 
                 st.markdown(
-                    f'<div class="alt-card">'
-                    f'<div class="alt-position">'
-                    f'Second most likely'
-                    f'</div>'
-                    f'<div class="alt-intent">'
-                    f'{html.escape(readable_intent(alt1["intent"]))}'
-                    f'</div>'
-                    f'<div class="alt-category">'
-                    f'{html.escape(alt1["category"])}'
-                    f'</div>'
-                    f'<div class="alt-confidence">'
-                    f'{alt1["confidence"]:.2%} confidence'
-                    f'</div>'
-                    f'</div>',
+                    '<div class="alt-card">'
+
+                    '<div class="alt-position">'
+                    'Second most likely'
+                    '</div>'
+
+                    '<div class="alt-intent">'
+                    + second_intent +
+                    '</div>'
+
+                    '<div class="alt-category">'
+                    + second_category +
+                    '</div>'
+
+                    '<div class="alt-confidence">'
+                    + f'{second_prediction["confidence"]:.2%}'
+                    + ' confidence'
+                    '</div>'
+
+                    '</div>',
                     unsafe_allow_html=True,
                 )
 
 
-            with alternative_col2:
+            with alt_column2:
+
+
+                third_intent = (
+                    html_lib.escape(
+                        readable_intent(
+                            third_prediction["intent"]
+                        )
+                    )
+                )
+
+
+                third_category = (
+                    html_lib.escape(
+                        third_prediction["category"]
+                    )
+                )
 
 
                 st.markdown(
-                    f'<div class="alt-card">'
-                    f'<div class="alt-position">'
-                    f'Third most likely'
-                    f'</div>'
-                    f'<div class="alt-intent">'
-                    f'{html.escape(readable_intent(alt2["intent"]))}'
-                    f'</div>'
-                    f'<div class="alt-category">'
-                    f'{html.escape(alt2["category"])}'
-                    f'</div>'
-                    f'<div class="alt-confidence">'
-                    f'{alt2["confidence"]:.2%} confidence'
-                    f'</div>'
-                    f'</div>',
+                    '<div class="alt-card">'
+
+                    '<div class="alt-position">'
+                    'Third most likely'
+                    '</div>'
+
+                    '<div class="alt-intent">'
+                    + third_intent +
+                    '</div>'
+
+                    '<div class="alt-category">'
+                    + third_category +
+                    '</div>'
+
+                    '<div class="alt-confidence">'
+                    + f'{third_prediction["confidence"]:.2%}'
+                    + ' confidence'
+                    '</div>'
+
+                    '</div>',
                     unsafe_allow_html=True,
                 )
 
+
+        # ====================================================
+        # PROBABILITY CHART
+        # ====================================================
 
         if show_probability_chart:
 
@@ -3005,6 +3145,10 @@ with try_tab:
             )
 
 
+        # ====================================================
+        # EXPLANATION
+        # ====================================================
+
         if show_explanation:
 
 
@@ -3025,8 +3169,8 @@ The customer query is classified into one of **27 customer-service intents**.
 The intent receiving the highest predicted probability becomes the primary
 prediction.
 
-Decodr then compares the prediction confidence with the validation-selected
-operating threshold of **{AUTO_THRESHOLD:.2%}**.
+The confidence of that prediction is then compared with the
+validation-selected operating threshold of **{AUTO_THRESHOLD:.2%}**.
 
 **Confidence ≥ {AUTO_THRESHOLD:.2%}**  
 → Candidate for automatic routing.
@@ -3034,8 +3178,8 @@ operating threshold of **{AUTO_THRESHOLD:.2%}**.
 **Confidence < {AUTO_THRESHOLD:.2%}**  
 → Human review recommended.
 
-The broader business category is assigned **after** intent prediction and is
-not provided to RoBERTa as an input.
+The broader business category is assigned **after** intent prediction.
+It is not supplied to RoBERTa as an input.
 """
                 )
 
@@ -3051,9 +3195,11 @@ with insights_tab:
         '<div class="kicker">'
         'Held-Out Evaluation'
         '</div>'
+
         '<div class="section-title">'
         'Model performance'
         '</div>'
+
         '<div class="section-copy">'
         'Comparative results from the 3,645-query held-out test set. '
         'The final test partition was not used during model selection.'
@@ -3062,8 +3208,8 @@ with insights_tab:
     )
 
 
-    metric1, metric2, metric3, metric4 = st.columns(
-        4
+    metric1, metric2, metric3, metric4 = (
+        st.columns(4)
     )
 
 
@@ -3086,7 +3232,7 @@ with insights_tab:
     with metric3:
 
         st.metric(
-            "Total errors",
+            "Total test errors",
             "3",
         )
 
@@ -3155,6 +3301,7 @@ with insights_tab:
         '<div class="kicker">'
         'Confidence-Aware Automation'
         '</div>'
+
         '<div class="section-title" '
         'style="font-size:1.55rem;">'
         'Validation-selected operating point'
@@ -3163,12 +3310,12 @@ with insights_tab:
     )
 
 
-    t1, t2, t3, t4 = st.columns(
-        4
+    threshold1, threshold2, threshold3, threshold4 = (
+        st.columns(4)
     )
 
 
-    with t1:
+    with threshold1:
 
         st.metric(
             "Threshold",
@@ -3176,7 +3323,7 @@ with insights_tab:
         )
 
 
-    with t2:
+    with threshold2:
 
         st.metric(
             "Automation coverage",
@@ -3184,7 +3331,7 @@ with insights_tab:
         )
 
 
-    with t3:
+    with threshold3:
 
         st.metric(
             "Selective accuracy",
@@ -3192,7 +3339,7 @@ with insights_tab:
         )
 
 
-    with t4:
+    with threshold4:
 
         st.metric(
             "Human review",
@@ -3201,9 +3348,9 @@ with insights_tab:
 
 
     st.caption(
-        "The confidence operating point was selected using validation-set "
-        "predictions. At the selected threshold, coverage was 99.6955% "
-        "and selective accuracy was 99.9167%."
+        "At the selected validation threshold, coverage was "
+        "99.6955% and selective accuracy was 99.9167%. "
+        "Eleven of 3,612 validation queries were referred for review."
     )
 
 
@@ -3211,26 +3358,31 @@ with insights_tab:
     st.write("")
 
 
-    insight1, insight2, insight3 = st.columns(
-        3
+    insight1, insight2, insight3 = (
+        st.columns(3)
     )
 
 
     with insight1:
 
+
         st.markdown(
             '<div class="info-card">'
+
             '<div class="info-label">'
-            'Predictive performance'
+            'Predictive Performance'
             '</div>'
+
             '<div class="info-title">'
             'Small headline gain'
             '</div>'
+
             '<div class="info-copy">'
             'RoBERTa improved Macro-F1 over Linear SVM by '
             'approximately 0.484 percentage points. '
-            'The aggregate difference is therefore modest.'
+            'The aggregate performance difference is therefore modest.'
             '</div>'
+
             '</div>',
             unsafe_allow_html=True,
         )
@@ -3238,19 +3390,24 @@ with insights_tab:
 
     with insight2:
 
+
         st.markdown(
             '<div class="info-card">'
+
             '<div class="info-label">'
-            'Operational risk'
+            'Operational Risk'
             '</div>'
+
             '<div class="info-title">'
             'Fewer consequential errors'
             '</div>'
+
             '<div class="info-copy">'
             'RoBERTa produced 3 test errors, including '
             '1 high-risk error, compared with 20 total and '
             '14 high-risk errors for Linear SVM.'
             '</div>'
+
             '</div>',
             unsafe_allow_html=True,
         )
@@ -3258,19 +3415,24 @@ with insights_tab:
 
     with insight3:
 
+
         st.markdown(
             '<div class="info-card">'
+
             '<div class="info-label">'
-            'Deployment trade-off'
+            'Deployment Trade-Off'
             '</div>'
+
             '<div class="info-title">'
             'Performance has a cost'
             '</div>'
+
             '<div class="info-copy">'
             'RoBERTa achieved the strongest predictive result '
             'but required substantially greater training time '
             'and model storage than the traditional baselines.'
             '</div>'
+
             '</div>',
             unsafe_allow_html=True,
         )
@@ -3280,7 +3442,20 @@ with insights_tab:
     st.write("")
 
 
-    efficiency = pd.DataFrame(
+    st.markdown(
+        '<div class="kicker">'
+        'Computational Efficiency'
+        '</div>'
+
+        '<div class="section-title" '
+        'style="font-size:1.55rem;">'
+        'Performance versus resource requirements'
+        '</div>',
+        unsafe_allow_html=True,
+    )
+
+
+    efficiency_results = pd.DataFrame(
         {
             "Model": [
                 "RoBERTa",
@@ -3309,20 +3484,8 @@ with insights_tab:
     )
 
 
-    st.markdown(
-        '<div class="kicker">'
-        'Computational Efficiency'
-        '</div>'
-        '<div class="section-title" '
-        'style="font-size:1.55rem;">'
-        'Performance versus resource requirements'
-        '</div>',
-        unsafe_allow_html=True,
-    )
-
-
     st.dataframe(
-        efficiency,
+        efficiency_results,
         hide_index=True,
         use_container_width=True,
     )
@@ -3339,9 +3502,11 @@ with about_tab:
         '<div class="kicker">'
         'Research Prototype'
         '</div>'
+
         '<div class="section-title">'
         'About Decodr'
         '</div>'
+
         '<div class="section-copy">'
         'A proof-of-concept interface translating the dissertation '
         'model evaluation into an interpretable customer-service '
@@ -3351,8 +3516,8 @@ with about_tab:
     )
 
 
-    about1, about2 = st.columns(
-        2
+    about1, about2 = (
+        st.columns(2)
     )
 
 
@@ -3361,20 +3526,24 @@ with about_tab:
 
         st.markdown(
             '<div class="info-card">'
+
             '<div class="info-label">'
             'Purpose'
             '</div>'
+
             '<div class="info-title">'
             'From prediction to routing'
             '</div>'
+
             '<div class="info-copy">'
             'Decodr demonstrates how a customer query can be '
             'classified into a fine-grained intent and subsequently '
             'mapped to a broader business workflow. Confidence adds '
-            'a decision layer that determines whether a prediction '
-            'is suitable for automatic handling or should first be '
+            'a decision layer determining whether the prediction is '
+            'suitable for automatic handling or should first be '
             'reviewed by a human.'
             '</div>'
+
             '</div>',
             unsafe_allow_html=True,
         )
@@ -3385,18 +3554,22 @@ with about_tab:
 
         st.markdown(
             '<div class="info-card">'
+
             '<div class="info-label">'
             'Model'
             '</div>'
+
             '<div class="info-title">'
             'Fine-tuned RoBERTa'
             '</div>'
+
             '<div class="info-copy">'
             'The deployed classifier is the final RoBERTa model '
             'evaluated in the dissertation. It predicts among '
             '27 customer-service intents, which are subsequently '
             'mapped to 11 broader operational categories.'
             '</div>'
+
             '</div>',
             unsafe_allow_html=True,
         )
@@ -3405,8 +3578,8 @@ with about_tab:
     st.write("")
 
 
-    about3, about4 = st.columns(
-        2
+    about3, about4 = (
+        st.columns(2)
     )
 
 
@@ -3415,17 +3588,22 @@ with about_tab:
 
         st.markdown(
             '<div class="info-card">'
+
             '<div class="info-label">'
-            'Human-in-the-loop'
+            'Human-in-the-Loop'
             '</div>'
+
             '<div class="info-title">'
             'Selective automation'
             '</div>'
+
             '<div class="info-copy">'
             'The prototype does not assume every prediction should '
             'trigger an automated action. Lower-confidence cases are '
-            'deliberately referred for human review.'
+            'deliberately referred for human review, illustrating a '
+            'hybrid automation approach.'
             '</div>'
+
             '</div>',
             unsafe_allow_html=True,
         )
@@ -3436,18 +3614,22 @@ with about_tab:
 
         st.markdown(
             '<div class="info-card">'
+
             '<div class="info-label">'
             'Scope'
             '</div>'
+
             '<div class="info-title">'
             'Academic demonstration'
             '</div>'
+
             '<div class="info-copy">'
             'Decodr is an MSc Business Analytics research prototype, '
             'not a production customer-service deployment. Performance '
             'reflects the dissertation dataset and should not be '
             'interpreted as guaranteed live-system performance.'
             '</div>'
+
             '</div>',
             unsafe_allow_html=True,
         )
@@ -3459,8 +3641,8 @@ with about_tab:
     st.warning(
         "The underlying dataset is synthetic, English-language and "
         "closed-set. Real-world deployment would require evaluation "
-        "on operational queries, monitoring for distribution shift "
-        "and mechanisms for queries outside the known intent taxonomy."
+        "on operational customer queries, monitoring for distribution "
+        "shift and mechanisms for queries outside the known intent taxonomy."
     )
 
 
