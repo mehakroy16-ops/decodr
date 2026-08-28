@@ -246,9 +246,7 @@ body,
 
 
 .block-container {
-
     max-width: 1160px;
-
     padding-top: 1.4rem;
     padding-bottom: 4rem;
 }
@@ -279,71 +277,93 @@ body,
 
 
 /* =========================================================
-   TABS
+   TABS — CLEAN MINIMAL STYLE
 ========================================================= */
 
 .stTabs [data-baseweb="tab-list"] {
 
-    gap: 7px;
+    gap: 28px;
 
-    background:
-        rgba(255,255,255,0.82);
+    background: transparent;
 
-    border:
+    border: none;
+
+    border-bottom:
         1px solid #E7E3EF;
 
-    padding: 7px;
-
-    border-radius: 17px;
+    padding: 0;
 
     margin-top: 10px;
     margin-bottom: 30px;
 
-    box-shadow:
-        0 8px 30px
-        rgba(60,42,120,0.05);
+    box-shadow: none;
 }
 
 
 .stTabs [data-baseweb="tab"] {
 
-    height: 46px;
+    height: 52px;
 
-    padding:
-        0 22px;
-
-    border-radius:
-        11px;
-
-    color:
-        #777181;
-
-    font-weight:
-        650;
-}
-
-
-.stTabs [aria-selected="true"] {
-
-    color:
-        #5E42DE !important;
+    padding: 0 2px;
 
     background:
+        transparent !important;
 
-        linear-gradient(
-            135deg,
-            #EFEAFF,
-            #F8F6FF
-        ) !important;
+    border:
+        none !important;
+
+    border-radius:
+        0 !important;
+
+    color:
+        #4F4A59;
+
+    font-weight:
+        600;
 
     box-shadow:
-        inset 0 0 0 1px
-        rgba(109,74,255,0.12);
+        none !important;
 }
 
 
+/* ACTIVE TAB */
+
+.stTabs button[role="tab"][aria-selected="true"] {
+
+    color:
+        #6D4AFF !important;
+
+    background:
+        transparent !important;
+
+    border:
+        none !important;
+
+    border-bottom:
+        3px solid #6D4AFF !important;
+
+    box-shadow:
+        none !important;
+}
+
+
+/* REMOVE DEFAULT STREAMLIT HIGHLIGHT */
+
 .stTabs [data-baseweb="tab-highlight"] {
-    display: none;
+    display: none !important;
+}
+
+
+/* REMOVE CLICK / FOCUS BOX */
+
+.stTabs button[role="tab"]:focus,
+.stTabs button[role="tab"]:focus-visible {
+
+    outline:
+        none !important;
+
+    box-shadow:
+        none !important;
 }
 
 
@@ -1074,13 +1094,16 @@ body,
 
 
 /* =========================================================
-   STREAMLIT METRICS
+   STREAMLIT METRICS — UPDATED TO PREVENT TRUNCATION
 ========================================================= */
 
 [data-testid="stMetric"] {
 
     padding:
         18px;
+
+    min-height:
+        145px;
 
     background:
 
@@ -1099,16 +1122,48 @@ body,
     box-shadow:
         0 9px 26px
         rgba(49,33,103,0.04);
+
+    overflow:
+        visible !important;
 }
 
 
 [data-testid="stMetricLabel"] {
-    color: #7D7787;
+
+    color:
+        #7D7787;
+
+    white-space:
+        normal !important;
 }
 
 
 [data-testid="stMetricValue"] {
-    color: #241F31;
+
+    color:
+        #241F31;
+
+    overflow:
+        visible !important;
+}
+
+
+[data-testid="stMetricValue"] > div {
+
+    font-size:
+        1.85rem !important;
+
+    line-height:
+        1.2 !important;
+
+    white-space:
+        nowrap !important;
+
+    overflow:
+        visible !important;
+
+    text-overflow:
+        clip !important;
 }
 
 
@@ -1151,9 +1206,7 @@ body,
 ========================================================= */
 
 [data-testid="stAlert"] {
-
-    border-radius:
-        16px;
+    border-radius: 16px;
 }
 
 
@@ -1204,16 +1257,19 @@ body,
 
 
     .section-title {
+        font-size: 1.65rem;
+    }
 
-        font-size:
-            1.65rem;
+
+    .stTabs [data-baseweb="tab-list"] {
+        gap: 17px;
     }
 
 
     .stTabs [data-baseweb="tab"] {
 
         padding:
-            0 10px;
+            0 1px;
 
         font-size:
             0.86rem;
@@ -1221,9 +1277,12 @@ body,
 
 
     .result-card {
+        min-height: 150px;
+    }
 
-        min-height:
-            150px;
+
+    [data-testid="stMetricValue"] > div {
+        font-size: 1.55rem !important;
     }
 }
 
@@ -1754,8 +1813,6 @@ body {
 }
 
 
-/* HERO CONTENT */
-
 .hero-content {
 
     position: relative;
@@ -1792,8 +1849,6 @@ body {
     margin-bottom: 13px;
 }
 
-
-/* LOGO */
 
 .logo {
 
@@ -1951,8 +2006,6 @@ body {
         rgba(109,74,255,0.55);
 }
 
-
-/* MOBILE */
 
 @media(max-width:650px) {
 
@@ -2163,23 +2216,17 @@ body {
 </defs>
 
 
-<!-- MAIN D -->
-
 <path
     d="M31 13 H61 C93 13 108 31 108 60 C108 89 93 107 61 107 H31 Z"
     fill="url(#logoBody)"
 />
 
 
-<!-- INNER SPACE -->
-
 <path
     d="M46 29 H61 C79 29 91 40 91 60 C91 80 79 91 61 91 H46 Z"
     fill="#F9F7FF"
 />
 
-
-<!-- SIGNAL FLOW -->
 
 <g class="logo-flow">
 
